@@ -1,0 +1,31 @@
+{
+  "name": "ai-dlc-os",
+  "version": "3.0.0",
+  "description": "AI-DLC Engineering OS: governed engineering memory, 26 specialist agents, evaluation gates and swarms for Claude Code and Codex.",
+  "author": {
+    "name": "AgentShield",
+    "url": "https://agentshield.com.br"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI-DLC Engineering OS",
+    "shortDescription": "Route, remember, evaluate and operate agent swarms.",
+    "longDescription": "AgentShield adds governed AI-DLC memory, specialist routing, evaluation gates, persistent swarm operations and Mission Control to Codex.",
+    "developerName": "AgentShield",
+    "category": "Developer Tools",
+    "capabilities": [
+      "MCP",
+      "Skills",
+      "Swarms",
+      "Memory"
+    ],
+    "websiteURL": "https://agentshield.com.br",
+    "defaultPrompt": [
+      "Route this task with AgentShield.",
+      "Show the current project memory.",
+      "Create a governed swarm plan."
+    ]
+  },
+  "mcpServers": "./.mcp.json",
+  "repository": "https://github.com/jcamargos/ai-dlc-engineering-os"
+}

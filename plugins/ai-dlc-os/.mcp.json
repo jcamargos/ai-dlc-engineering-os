@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ai_dlc_os": {
+      "command": "python",
+      "args": [
+        "-m",
+        "ai_dlc_mcp.server"
+      ]
+    }
+  }
+}

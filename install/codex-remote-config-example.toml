@@ -1,0 +1,14 @@
+# AgentShield AI-DLC Engineering OS — remote MCP
+# Activate only after https://agentshield.com.br/mcp passes end-to-end validation.
+
+[features]
+rmcp_client = true
+
+[mcp_servers.agentshield]
+url = "https://agentshield.com.br/mcp"
+oauth_resource = "https://agentshield.com.br/mcp"
+enabled = true
+required = false
+supports_parallel_tool_calls = false
+startup_timeout_sec = 20.0
+tool_timeout_sec = 120.0

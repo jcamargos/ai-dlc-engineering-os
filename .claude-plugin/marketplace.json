@@ -1,0 +1,19 @@
+{
+  "name": "ai-dlc-os-marketplace",
+  "owner": {
+    "name": "AgentShield",
+    "url": "https://agentshield.com.br"
+  },
+  "description": "AI-DLC Engineering OS plugins",
+  "plugins": [
+    {
+      "name": "ai-dlc-os",
+      "source": "./plugins/ai-dlc-os",
+      "description": "Governed engineering memory, specialist agents, evaluation gates and swarms",
+      "version": "3.0.0",
+      "author": {
+        "name": "AgentShield"
+      }
+    }
+  ]
+}

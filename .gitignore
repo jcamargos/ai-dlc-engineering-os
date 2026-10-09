@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+node_modules/
+sdk/typescript/dist/
+.test-tmp/
+.test-cli/
+benchmarks/results/
+pytest-cache-files-*/
+.wrangler/
+*.db
+*.db-shm
+*.db-wal
+.DS_Store

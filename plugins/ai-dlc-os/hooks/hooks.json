@@ -1,0 +1,51 @@
+{
+  "description": "Fail-open AI-DLC Engineering OS hooks: session context, specialist routing, AI-DLC tool audit and completion evidence reminder. Raw prompts are never stored.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -m ai_dlc_mcp.cli hook session-start",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -m ai_dlc_mcp.cli hook route",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__.*ai_dlc_os__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -m ai_dlc_mcp.cli hook memory",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -m ai_dlc_mcp.cli hook evaluate",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
