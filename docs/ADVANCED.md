@@ -1,11 +1,14 @@
-# Platform v3 (local edition)
+# Advanced capabilities
+
+Swarms, Mission Control, hooks, SDKs and opt-in federation. None of these are needed
+for the core memory workflow described in the README.
 
 ## Capability map
 
 | Capability | Implementation | Safety boundary |
 |---|---|---|
 | Native plugin | Portable `plugin.json`, Codex and Claude compatibility manifests, MCP, skill and hooks | Hooks have 5–10 second bounds and fail open |
-| Init and doctor | `agentshield init`, `agentshield doctor` | Writes repository-local config; network diagnostic is opt-in |
+| Init and doctor | `ai-dlc init`, `ai-dlc doctor` | Writes repository-local config; network diagnostic is opt-in |
 | Automatic hooks | Session, prompt, post-tool and stop events | Redacted allowlist output; no raw prompt/content persistence |
 | Swarms | SQLite/PostgreSQL DAG, atomic leases, lifecycle controls | Bounded parallelism, lease ownership, expiry recovery, audit log |
 | Worktrees | `create_swarm_worktree` | Validated repository and target root; no automatic deletion |
@@ -18,18 +21,21 @@
 
 ## Operational commands
 
+The `agentshield` command remains as a deprecated alias of `ai-dlc`. Repositories initialized
+before 3.2.0 keep working: `.agentshield/config.json` is still read when `.ai-dlc/config.json` is absent.
+
 ```bash
-agentshield init . --project-id example
-agentshield doctor . --network
-agentshield mission-control --host 127.0.0.1 --port 8788
-agentshield swarm create example "Ship feature" tasks.json --max-parallel 4
-agentshield swarm pause SWARM_ID --reason "operator inspection"
-agentshield swarm resume SWARM_ID
-agentshield swarm cancel SWARM_ID --reason "unsafe dependency"
+ai-dlc init . --project-id example
+ai-dlc doctor . --network
+ai-dlc mission-control --host 127.0.0.1 --port 8788
+ai-dlc swarm create example "Ship feature" tasks.json --max-parallel 4
+ai-dlc swarm pause SWARM_ID --reason "operator inspection"
+ai-dlc swarm resume SWARM_ID
+ai-dlc swarm cancel SWARM_ID --reason "unsafe dependency"
 ```
 
 Federation receivers run through Mission Control. Set both
-`AGENTSHIELD_CONTROL_TOKEN` and a random 32+ character
+`AI_DLC_CONTROL_TOKEN` (the legacy `AGENTSHIELD_CONTROL_TOKEN` is still read) and a random 32+ character
 `AGENTSHIELD_FEDERATION_SECRET` before binding beyond loopback. Peers must agree
 out of band on the secret or replace HMAC with an externally reviewed asymmetric
 key-management deployment profile.

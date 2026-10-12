@@ -19,11 +19,11 @@ Append `--editors codex --yes` for unattended installation with explicit consent
 Running the setup command again repairs registrations with the selected version.
 
 The package is available on [PyPI](https://pypi.org/project/ai-dlc-engineering-os/).
-To pin this release, use `uvx --from ai-dlc-engineering-os==3.1.0 ai-dlc-engineering-os setup`.
+To pin this release, use `uvx --from ai-dlc-engineering-os==3.2.0 ai-dlc-engineering-os setup`.
 For installation directly from GitHub (requires Git), use:
 
 ```bash
-uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
+uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.2.0 ai-dlc-engineering-os setup
 ```
 
 ## What changes
@@ -38,8 +38,10 @@ uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-
   Existing memory receives a SQLite online backup under its adjacent `backups/`
   directory before verification opens or migrates it.
 
-Existing data remains in `~/.codex/ai-dlc-memory/memory.db` unless overridden by
-`AI_DLC_DATA_DIR` or `AI_DLC_DB_PATH`. AI model-provider data handling is controlled
+Memory lives in `~/.ai-dlc/memory/memory.db`. Installations created before 3.2.0 keep using
+`~/.codex/ai-dlc-memory/memory.db` automatically; nothing is moved. To adopt the new location,
+close your editors and move that folder to `~/.ai-dlc/memory`. `AI_DLC_DATA_DIR` or `AI_DLC_DB_PATH`
+override both. AI model-provider data handling is controlled
 by your editor. Stop other setup/update processes before making configuration changes.
 
 ## Verify and recover

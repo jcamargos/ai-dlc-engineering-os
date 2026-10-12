@@ -21,7 +21,7 @@ def main() -> None:
         profile.mkdir(parents=True)
         env = dict(os.environ)
         env.update(UV_TOOL_DIR=str(root / "tools"), UV_TOOL_BIN_DIR=str(root / "bin"),
-                   UV_CACHE_DIR=str(root / "cache"), AI_DLC_DATA_DIR=str(home / ".codex/ai-dlc-memory"))
+                   UV_CACHE_DIR=str(root / "cache"), AI_DLC_DATA_DIR=str(home / ".ai-dlc/memory"))
         env.pop("AI_DLC_DB_PATH", None)
         env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env.get("PATH", "")
         uv = shutil.which("uv", path=env["PATH"])

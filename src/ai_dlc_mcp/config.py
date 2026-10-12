@@ -21,11 +21,22 @@ ENABLE_MARKETPLACE = os.getenv("AI_DLC_ENABLE_MARKETPLACE", "0").lower() in {"1"
 LOG_LEVEL = os.getenv("AI_DLC_LOG_LEVEL", "WARNING").upper()
 
 
-def default_data_dir() -> Path:
+def default_data_dir(home: Path | None = None) -> Path:
+    """Resolve the shared memory directory; every host must resolve it identically.
+
+    Order: ``AI_DLC_DATA_DIR`` > ``~/.ai-dlc/memory`` > legacy ``~/.codex/ai-dlc-memory``.
+    The legacy location is used only while it holds a database and the new one does not, so
+    installations created before 3.2.0 keep their memory without any automatic move.
+    """
     override = os.getenv("AI_DLC_DATA_DIR")
     if override:
         return Path(override).expanduser().resolve()
-    return Path.home() / ".codex" / "ai-dlc-memory"
+    base = home if home is not None else Path.home()
+    current = base / ".ai-dlc" / "memory"
+    legacy = base / ".codex" / "ai-dlc-memory"
+    if (legacy / "memory.db").exists() and not (current / "memory.db").exists():
+        return legacy
+    return current
 
 
 DATA_DIR = default_data_dir()

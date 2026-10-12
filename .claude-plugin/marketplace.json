@@ -10,7 +10,7 @@
       "name": "ai-dlc-os",
       "source": "./plugins/ai-dlc-os",
       "description": "Governed engineering memory, specialist agents, evaluation gates and swarms",
-      "version": "3.1.0",
+      "version": "3.2.0",
       "author": {
         "name": "AgentShield"
       }

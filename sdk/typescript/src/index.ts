@@ -46,7 +46,7 @@ export class AgentShield {
     const headers: Record<string, string> = {
       "content-type": "application/json",
       accept: "application/json, text/event-stream",
-      "user-agent": "agentshield-typescript/3.1.0",
+      "user-agent": "agentshield-typescript/3.2.0",
     };
     if (this.#token) headers.authorization = `Bearer ${this.#token}`;
     if (this.#sessionId) headers["mcp-session-id"] = this.#sessionId;
@@ -76,7 +76,7 @@ export class AgentShield {
   }
 
   initialize(): Promise<JsonObject> {
-    return this.#rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "agentshield-typescript", version: "3.1.0" } });
+    return this.#rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "agentshield-typescript", version: "3.2.0" } });
   }
 
   async tools(): Promise<JsonObject[]> {
