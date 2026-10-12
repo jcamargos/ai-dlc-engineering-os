@@ -45,15 +45,13 @@ idempotent, keeps timestamped backups and uninstalls cleanly. Then run `ai-dlc-i
 3. do the work; persist only what is durable (`save_decision`, `record_learning`, `record_incident`)
 4. `record_task_outcome` with evidence
 
-## Open core
+## Free and open source
 
-| Edition | What | License |
-|---|---|---|
-| **AI-DLC Engineering OS** (this repo) | local runtime, agents, installer, plugin, SDK clients | Apache-2.0, free |
-| **AI-DLC OS Cloud** (AgentShield) | shared team memory, SSO/RBAC, audit, hosted evaluation & release pipeline, backups, retention | commercial — talk to us |
+Everything here is free under Apache-2.0 — runtime, 26 agents, installer, plugin and SDK clients.
+It runs entirely on your machine: no account, no telemetry, no hosted service required.
 
 ## Contributing & security
-See [CONTRIBUTING.md](CONTRIBUTING.md) (CLA via sign-off) and [SECURITY.md](SECURITY.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) (DCO sign-off) and [SECURITY.md](SECURITY.md).
 Not affiliated with Anthropic, OpenAI, Microsoft or GitHub.
 
 ---
@@ -67,6 +65,6 @@ e nada vira "regra" sem evidência e aprovação humana.
 - **Instalação:** um comando (acima). Registra o servidor `ai_dlc_os` globalmente no Codex, Claude Code e VS Code.
 - **Seguro por padrão:** segredos são recusados, conteúdo com cara de prompt injection é isolado, exclusão definitiva (LGPD).
 - **Governança humana:** agentes propõem; só humanos aprovam (`ai-dlc-admin`).
-- **Licença:** Apache-2.0, gratuito. A versão para times (memória compartilhada, SSO, auditoria) é o **AI-DLC OS Cloud**, comercial.
+- **Licença:** Apache-2.0, 100% gratuito. Roda inteiro na sua máquina: sem conta, sem telemetria, sem serviço hospedado.
 
 Criado por José Camargo · [@jcamarguiho](https://www.instagram.com/jcamarguiho) · [agentshield.com.br](https://agentshield.com.br)

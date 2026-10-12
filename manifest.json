@@ -89,10 +89,5 @@
     ]
   },
   "license": "Apache-2.0",
-  "repository": "https://github.com/jcamargos/ai-dlc-engineering-os",
-  "cloud": {
-    "name": "AI-DLC OS Cloud (AgentShield)",
-    "endpoint": "https://agentshield.com.br/mcp",
-    "license": "commercial"
-  }
+  "repository": "https://github.com/jcamargos/ai-dlc-engineering-os"
 }

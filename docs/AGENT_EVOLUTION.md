@@ -56,4 +56,4 @@ The chain provides tamper evidence, not absolute tamper prevention against datab
 
 ## Verification
 
-The local implementation is covered by Python tests for safety failure, non-regression, independent R3 approval, ordered promotion, chained receipts, drift detection, and rollback restoration. The hosted AI-DLC OS Cloud implements the same lifecycle on PostgreSQL with row-level tenant isolation.
+The local implementation is covered by Python tests for safety failure, non-regression, independent R3 approval, ordered promotion, chained receipts, drift detection, and rollback restoration.
