@@ -6,7 +6,10 @@
   longer default to any hosted server. Pass an endpoint explicitly or set `AI_DLC_REMOTE_URL`;
   without one, `init` configures a local-only project. Breaking only for callers that relied on
   the implicit default.
-- 100% free and open source: removed references to hosted offerings and the remote example config; contributions now use the DCO sign-off instead of a CLA.
+- 100% free and open source: removed references to hosted offerings and the remote example config;
+  contributions now use the DCO sign-off instead of a CLA.
+- README rewritten: badges, requirements, what the installer changes, agents, commands, security
+  model, FAQ and uninstall.
 - Test fixtures no longer reference private repository names.
 
 ## 3.0.0 - first open-source release (Apache-2.0)
