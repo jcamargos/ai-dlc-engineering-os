@@ -239,4 +239,4 @@ reiniciar o editor e pedir: *"Resolva o id deste projeto e me dê o contexto de 
 Desinstalação: `.\install\uninstall-windows.ps1` (Windows) ou `~/.codex/ai-dlc-mcp/.venv/bin/ai-dlc-install uninstall`.
 A memória é preservada.
 
-Criado por José Camargo · [@jcamarguiho](https://www.instagram.com/jcamarguiho)
+Criado por José Camargo · [@jcamarguinho](https://www.instagram.com/jcamarguinho)
