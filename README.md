@@ -2,6 +2,8 @@
 
 # AI-DLC Engineering OS
 
+**English | [Português (Brasil)](README.pt-BR.md)**
+
 ### Your coding agents forget everything between sessions. This fixes that.
 
 **Local memory for decisions, incidents and conventions. You approve what becomes a rule.**
@@ -13,7 +15,7 @@
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Local-first](https://img.shields.io/badge/memory-local--first-success.svg)
 
-**[Quick start](#quick-start) · [Why not CLAUDE.md?](#why-not-just-claudemd-or-agentsmd) · [Proof](#proof-not-promises) · [How it works](#how-it-works) · [FAQ](#faq) · [Português](#português)**
+**[Quick start](#quick-start) · [Why not CLAUDE.md?](#why-not-just-claudemd-or-agentsmd) · [Proof](#proof-not-promises) · [How it works](#how-it-works) · [FAQ](#faq)**
 
 <img src="docs/assets/cross-session-demo.svg" alt="Recorded demo: session 1 saves a decision and the server refuses a credential; session 2, a new process, recalls the decision with no credential in context." width="860" />
 
@@ -239,44 +241,4 @@ Microsoft or GitHub.
 
 ---
 
-## Português
-
-**Seus agentes de código esquecem tudo entre uma sessão e outra. O AI-DLC Engineering OS resolve isso.**
-
-Memória de engenharia local e governada + 26 agentes especialistas para Claude Code, Codex e
-VS Code, via MCP. Decisões, incidentes e padrões do projeto continuam disponíveis na próxima
-sessão e em qualquer editor configurado, e nada vira "regra" sem evidência e aprovação humana.
-
-**Gratuito e open source (MIT).** O servidor de memória roda localmente, sem conta,
-telemetria ou serviço hospedado. Seu cliente de IA controla o envio do contexto
-recuperado ao provedor do modelo; conexões remotas são opcionais.
-
-### Instalação
-
-Instale o [uv](https://docs.astral.sh/uv/getting-started/installation/). No Windows,
-macOS ou Linux, execute:
-
-```bash
-uvx ai-dlc-engineering-os setup
-```
-
-Escolha os editores, revise as alterações e confirme. O assistente instala um
-ambiente persistente, faz backups, registra o MCP e verifica os editores escolhidos.
-Reinicie o editor e pergunte: *"O que já sabemos sobre este projeto antes de eu mexer no fluxo de pagamento?"*
-
-Pacote disponível no [PyPI](https://pypi.org/project/ai-dlc-engineering-os/). Veja o
-[guia de instalação](docs/INSTALLATION.md) para atualização e desinstalação.
-
-### Por que usar
-
-- **Memória que continua verdadeira:** decisões, lições, incidentes e resultados, com busca textual e
-  vetorial local. O repositório e os testes sempre prevalecem sobre a memória.
-- **Seguro por padrão:** segredos são recusados, conteúdo com cara de prompt injection é isolado, e há
-  exclusão definitiva (LGPD).
-- **Governança humana:** agentes propõem; só humanos aprovam (`ai-dlc-admin`, em terminal interativo).
-- **Mesma memória no Claude Code, Codex e VS Code** da sua máquina.
-- **Provado, não prometido:** demo e benchmarks reproduzíveis com um comando (veja [Proof](#proof-not-promises)).
-
-Desinstalação: siga o [guia](docs/INSTALLATION.md#uninstall). A memória é preservada.
-
-Criado por José Camargo · [LinkedIn](https://www.linkedin.com/in/joseacamargo) · [Instagram @jcamarguinho](https://www.instagram.com/jcamarguinho)
+Created by José Camargo · [LinkedIn](https://www.linkedin.com/in/joseacamargo) · [Instagram @jcamarguinho](https://www.instagram.com/jcamarguinho)
