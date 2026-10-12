@@ -2,13 +2,13 @@
 
 ## One-command setup
 
-Requirements: [uv](https://docs.astral.sh/uv/getting-started/installation/) and Git.
+Requirements: [uv](https://docs.astral.sh/uv/getting-started/installation/).
 uv can provision a compatible Python automatically. No administrator privileges
 are required. Supported editors: Codex, Claude Code and VS Code / Insiders
 (default profiles). Open VS Code once before selecting it.
 
 ```bash
-uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
+uvx ai-dlc-engineering-os setup
 ```
 
 Choose one or more editors, inspect the paths and confirm. Restart those editors.
@@ -18,8 +18,13 @@ Append `--editors codex,claude --dry-run` to preview without installation or edi
 Append `--editors codex --yes` for unattended installation with explicit consent.
 Running the setup command again repairs registrations with the selected version.
 
-PyPI publication is pending. After publication, the equivalent short command is
-`uvx ai-dlc-engineering-os setup`. Do not use that form until the package is available.
+The package is available on [PyPI](https://pypi.org/project/ai-dlc-engineering-os/).
+To pin this release, use `uvx --from ai-dlc-engineering-os==3.1.0 ai-dlc-engineering-os setup`.
+For installation directly from GitHub (requires Git), use:
+
+```bash
+uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
+```
 
 ## What changes
 
@@ -101,11 +106,10 @@ For source-script installations, run
 `powershell -ExecutionPolicy Bypass -File .\install\uninstall-windows.ps1` on Windows.
 Memory is preserved by all uninstall paths.
 
-## Enable the short PyPI command (maintainer)
+## Publish a new version (maintainer)
 
-Create a PyPI account and enable its required two-factor authentication. Configure
-a [pending trusted publisher](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
-with these exact values:
+Publishing uses [PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/)
+with these configured values:
 
 | Field | Value |
 | --- | --- |
@@ -118,5 +122,5 @@ with these exact values:
 Then run **Publish to PyPI** from GitHub Actions on `main`. The workflow builds,
 validates and smoke-tests the package before publishing through short-lived OIDC
 credentials. No API token is stored in the repository. Each published version is
-immutable; use a new version for subsequent changes. After publication, verify the
-short uvx command in an isolated home before making it the README default.
+immutable; use a new version for subsequent package changes. After publication,
+verify the short uvx command in an isolated home.
