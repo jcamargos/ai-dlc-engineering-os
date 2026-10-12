@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.1 - hygiene
+
+- **No implicit hosted endpoint.** The Python and TypeScript SDK clients and `ai-dlc init` no
+  longer default to the commercial AI-DLC OS Cloud endpoint. Pass an endpoint explicitly or set
+  `AI_DLC_CLOUD_URL`; without one, `init` configures a local-only project. Breaking only for
+  callers that relied on the implicit default.
+- Test fixtures no longer reference private repository names.
+
 ## 3.0.0 - first open-source release (Apache-2.0)
 
 Initial public release of AI-DLC Engineering OS, the local edition of AgentShield.

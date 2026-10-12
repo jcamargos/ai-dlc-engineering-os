@@ -129,12 +129,12 @@ class PurgeTests(Base):
 
 class MergeTests(Base):
     def test_merge_projects_moves_everything(self):
-        self.store.ensure_project("jcamargos/AgentShield-MCP", "dup", repo_path="C:/repo")
-        self.store.save_memory("jcamargos/AgentShield-MCP", "fact", "Gateway", "Edge worker fronts the database")
-        self.store.record_task_outcome("jcamargos/AgentShield-MCP", "deploy", "done")
-        out = self.store.merge_projects("jcamargos/AgentShield-MCP", "payments")
+        self.store.ensure_project("acme/Payments-API", "dup", repo_path="C:/repo")
+        self.store.save_memory("acme/Payments-API", "fact", "Gateway", "Edge worker fronts the database")
+        self.store.record_task_outcome("acme/Payments-API", "deploy", "done")
+        out = self.store.merge_projects("acme/Payments-API", "payments")
         self.assertEqual(out["moved"]["memories"], 1)
-        self.assertIsNone(self.store.get_project("jcamargos-agentshield-mcp"))
+        self.assertIsNone(self.store.get_project("acme-payments-api"))
         self.assertEqual(self.store.search("edge worker", "payments")[0].title, "Gateway")
         self.assertEqual(self.store.get_project("payments")["repo_path"], "C:/repo")
 
