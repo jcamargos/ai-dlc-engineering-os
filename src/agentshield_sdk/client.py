@@ -32,7 +32,7 @@ class AgentShieldClient:
     def _rpc(self, method: str, params: dict[str, Any] | None = None) -> Any:
         self._request_id += 1
         body = json.dumps({"jsonrpc": "2.0", "id": self._request_id, "method": method, "params": params or {}}).encode()
-        headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream", "User-Agent": "agentshield-python/3.0.1"}
+        headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream", "User-Agent": "agentshield-python/3.0.2"}
         if self._token:
             headers["Authorization"] = f"Bearer {self._token}"
         if self.session_id:
@@ -60,7 +60,7 @@ class AgentShieldClient:
         return envelope.get("result")
 
     def initialize(self) -> dict[str, Any]:
-        result = self._rpc("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "agentshield-python", "version": "3.0.1"}})
+        result = self._rpc("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "agentshield-python", "version": "3.0.2"}})
         return result or {}
 
     def list_tools(self) -> list[dict[str, Any]]:

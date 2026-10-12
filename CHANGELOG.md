@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 3.0.2 - MIT license and refreshed documentation (2026-10-12)
 
 - Change the project license to MIT, including Python, SDK and plugin metadata.
   Previously published releases retain their original license notices.
