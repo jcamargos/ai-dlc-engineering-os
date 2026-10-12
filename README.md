@@ -8,7 +8,7 @@
 
 [![CI](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/jcamargos/ai-dlc-engineering-os)](https://github.com/jcamargos/ai-dlc-engineering-os/releases)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Local-first](https://img.shields.io/badge/memory-local--first-success.svg)
 
@@ -26,7 +26,7 @@ Decisions, incidents and conventions should survive a coding session.
 **AI-DLC Engineering OS** gives your agents persistent project memory and
 specialist contracts, with evidence and human approval governing what becomes a rule.
 
-**Free and open source (Apache-2.0).** The memory server runs locally with SQLite:
+**Free and open source (MIT).** The memory server runs locally with SQLite:
 no account, telemetry or hosted service required. Your AI client controls which
 retrieved context it sends to its model provider. Remote SDK connections and
 federation require explicit configuration.
@@ -208,7 +208,7 @@ Microsoft or GitHub.
 Claude Code, Codex e VS Code, via MCP. Seus agentes passam a lembrar decisões, incidentes e padrões
 do projeto — e nada vira "regra" sem evidência e aprovação humana.
 
-**Gratuito e open source (Apache-2.0).** O servidor de memória roda localmente, sem conta,
+**Gratuito e open source (MIT).** O servidor de memória roda localmente, sem conta,
 telemetria ou serviço hospedado obrigatório. Seu cliente de IA controla o envio do contexto
 recuperado ao provedor do modelo; conexões remotas são opcionais.
 

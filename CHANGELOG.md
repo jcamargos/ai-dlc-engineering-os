@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Change the project license to MIT, including Python, SDK and plugin metadata.
+  Previously published releases retain their original license notices.
+- Refresh the README with a workflow diagram, navigation, collapsible FAQ and
+  documentation index; remove website links and clarify local memory behavior.
+
 ## 3.0.1 - free and local by default
 
 - **No implicit remote endpoint.** The Python and TypeScript SDK clients and `agentshield init` no
