@@ -32,7 +32,7 @@ def init_command(args: argparse.Namespace) -> int:
     root = Path(args.directory).resolve()
     root.mkdir(parents=True, exist_ok=True)
     project_id = args.project_id or _store().resolve_project_id(str(root))["project_id"]
-    endpoint = args.endpoint or os.environ.get("AI_DLC_CLOUD_URL", "").strip() or None  # local-only unless explicitly configured
+    endpoint = args.endpoint or os.environ.get("AI_DLC_REMOTE_URL", "").strip() or None  # local-only unless explicitly configured
     max_parallel = args.max_parallel
     if sys.stdin.isatty() and not args.yes:
         print("AgentShield initialization wizard (Enter accepts the default)")

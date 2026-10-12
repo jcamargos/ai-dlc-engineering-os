@@ -3,8 +3,8 @@
 ```ts
 import { AgentShield } from "@agentshield/sdk";
 
-// No implicit hosted default: pass the endpoint or set AI_DLC_CLOUD_URL.
-const shield = new AgentShield({ endpoint: process.env.AI_DLC_CLOUD_URL, token: process.env.AGENTSHIELD_TOKEN });
+// No implicit hosted default: pass the endpoint or set AI_DLC_REMOTE_URL.
+const shield = new AgentShield({ endpoint: process.env.AI_DLC_REMOTE_URL, token: process.env.AGENTSHIELD_TOKEN });
 await shield.initialize();
 const route = await shield.route("Review this payment migration", "payments");
 ```

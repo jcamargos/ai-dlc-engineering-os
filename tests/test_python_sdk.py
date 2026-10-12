@@ -36,7 +36,7 @@ class PythonSdkTests(unittest.TestCase):
             with self.assertRaises(AgentShieldError):
                 AgentShieldClient(token="x")
 
-    @patch.dict("os.environ", {"AI_DLC_CLOUD_URL": "https://mcp.example.test/mcp/"})
+    @patch.dict("os.environ", {"AI_DLC_REMOTE_URL": "https://mcp.example.test/mcp/"})
     def test_endpoint_from_environment(self):
         self.assertEqual(AgentShieldClient().endpoint, "https://mcp.example.test/mcp")
 

@@ -15,8 +15,8 @@ test("calls MCP tools without leaking token in the body", async () => {
 });
 
 test("requires an explicit endpoint (no implicit hosted default)", () => {
-  const saved = process.env.AI_DLC_CLOUD_URL;
-  delete process.env.AI_DLC_CLOUD_URL;
+  const saved = process.env.AI_DLC_REMOTE_URL;
+  delete process.env.AI_DLC_REMOTE_URL;
   try { assert.throws(() => new AgentShield({ token: "x" }), /endpoint is required/); }
-  finally { if (saved !== undefined) process.env.AI_DLC_CLOUD_URL = saved; }
+  finally { if (saved !== undefined) process.env.AI_DLC_REMOTE_URL = saved; }
 });

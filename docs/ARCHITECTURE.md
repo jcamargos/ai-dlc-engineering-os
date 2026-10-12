@@ -31,6 +31,5 @@ approval, human verification, release approval, purge-project and merge-projects
 the marketplace (`AI_DLC_ENABLE_MARKETPLACE=1`) has no external trust root; both are off by default.
 Mission Control binds to loopback and rejects non-loopback Host headers.
 
-**Cloud.** AI-DLC OS Cloud (commercial) exposes the same concepts over Streamable HTTP with OAuth,
-PostgreSQL row-level tenant isolation and a hosted evaluation/release pipeline. The local edition does
-not depend on it.
+**Remote clients.** The Python and TypeScript SDK clients speak MCP Streamable HTTP to any compatible
+server you choose (`AI_DLC_REMOTE_URL`); nothing is contacted unless you configure it.

@@ -1,11 +1,12 @@
 # Changelog
 
-## 3.0.1 - hygiene
+## 3.0.1 - free and local by default
 
-- **No implicit hosted endpoint.** The Python and TypeScript SDK clients and `ai-dlc init` no
-  longer default to the commercial AI-DLC OS Cloud endpoint. Pass an endpoint explicitly or set
-  `AI_DLC_CLOUD_URL`; without one, `init` configures a local-only project. Breaking only for
-  callers that relied on the implicit default.
+- **No implicit remote endpoint.** The Python and TypeScript SDK clients and `ai-dlc init` no
+  longer default to any hosted server. Pass an endpoint explicitly or set `AI_DLC_REMOTE_URL`;
+  without one, `init` configures a local-only project. Breaking only for callers that relied on
+  the implicit default.
+- 100% free and open source: removed references to hosted offerings and the remote example config; contributions now use the DCO sign-off instead of a CLA.
 - Test fixtures no longer reference private repository names.
 
 ## 3.0.0 - first open-source release (Apache-2.0)

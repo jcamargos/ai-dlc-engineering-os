@@ -20,9 +20,9 @@ class AgentShieldClient:
     """
 
     def __init__(self, endpoint: str | None = None, token: str | None = None, timeout: float = 30.0):
-        endpoint = (endpoint or os.environ.get("AI_DLC_CLOUD_URL", "")).strip()
+        endpoint = (endpoint or os.environ.get("AI_DLC_REMOTE_URL", "")).strip()
         if not endpoint:
-            raise AgentShieldError("endpoint is required: pass endpoint=... or set AI_DLC_CLOUD_URL")
+            raise AgentShieldError("endpoint is required: pass endpoint=... or set AI_DLC_REMOTE_URL")
         self.endpoint = endpoint.rstrip("/")
         self._token = token
         self.timeout = timeout

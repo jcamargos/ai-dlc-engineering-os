@@ -32,8 +32,8 @@ export class AgentShield {
 
   constructor(options: AgentShieldOptions = {}) {
     const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env;
-    const endpoint = (options.endpoint ?? env?.AI_DLC_CLOUD_URL ?? "").trim();
-    if (!endpoint) throw new AgentShieldError("endpoint is required: pass { endpoint } or set AI_DLC_CLOUD_URL");
+    const endpoint = (options.endpoint ?? env?.AI_DLC_REMOTE_URL ?? "").trim();
+    if (!endpoint) throw new AgentShieldError("endpoint is required: pass { endpoint } or set AI_DLC_REMOTE_URL");
     this.endpoint = endpoint.replace(/\/$/, "");
     this.#token = options.token;
     this.timeoutMs = options.timeoutMs ?? 30_000;
