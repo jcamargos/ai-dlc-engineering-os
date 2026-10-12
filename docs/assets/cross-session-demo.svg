@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="354" viewBox="0 0 860 354" role="img" aria-label="Recorded demo: a decision saved in one session is recalled by another session; a credential is refused.">
+<style>text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px}.l{opacity:0;animation:in .35s forwards}@keyframes in{to{opacity:1}}@media (prefers-reduced-motion:reduce){.l{animation:none;opacity:1}}</style>
+<rect width="860" height="354" rx="12" fill="#0d1117"/>
+<circle cx="24" cy="22" r="6" fill="#ff5f57"/><circle cx="44" cy="22" r="6" fill="#febc2e"/><circle cx="64" cy="22" r="6" fill="#28c840"/>
+<text x="430" y="27" fill="#8b949e" text-anchor="middle" font-size="13">recorded by scripts/demo_cross_session.py</text>
+<text class="l" style="animation-delay:0.0s" x="24" y="58" fill="#e6edf3" font-weight="700">Session 1 · editor A · Monday</text>
+<text class="l" style="animation-delay:0.9s" x="24" y="84" fill="#7ee787" font-weight="400">› save_decision → Idempotency keys on every payment write</text>
+<text class="l" style="animation-delay:1.8s" x="24" y="110" fill="#a5d6ff" font-weight="400">  ✓ stored as accepted decision</text>
+<text class="l" style="animation-delay:2.7s" x="24" y="136" fill="#7ee787" font-weight="400">› save_memory → gateway key sk_live_…</text>
+<text class="l" style="animation-delay:3.6s" x="24" y="162" fill="#ffa198" font-weight="400">  ✗ refused: looks like a credential</text>
+<text class="l" style="animation-delay:4.5s" x="24" y="201" fill="#e6edf3" font-weight="700">Session 2 · editor B · Tuesday (new process)</text>
+<text class="l" style="animation-delay:5.4s" x="24" y="227" fill="#7ee787" font-weight="400">› get_project_context → task: add refund endpoint</text>
+<text class="l" style="animation-delay:6.3s" x="24" y="253" fill="#a5d6ff" font-weight="400">  ✓ recalled: Idempotency-Key required on payment writes</text>
+<text class="l" style="animation-delay:7.2s" x="24" y="279" fill="#a5d6ff" font-weight="400">  ✓ no credential in context</text>
+<text class="l" style="animation-delay:8.1s" x="24" y="305" fill="#8b949e" font-weight="400">  memory: one local SQLite file · search: fts5-bm25</text>
+</svg>

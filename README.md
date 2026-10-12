@@ -2,68 +2,91 @@
 
 # AI-DLC Engineering OS
 
-### Engineering memory that carries across sessions.
+### Your coding agents forget everything between sessions. This fixes that.
 
-**26 specialists. Evidence-backed knowledge. Human-governed rules.**
+**Local memory for decisions, incidents and conventions. You approve what becomes a rule.**
 
 [![CI](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/jcamargos/ai-dlc-engineering-os)](https://github.com/jcamargos/ai-dlc-engineering-os/releases)
+[![PyPI](https://img.shields.io/pypi/v/ai-dlc-engineering-os)](https://pypi.org/project/ai-dlc-engineering-os/)
+[![Downloads](https://img.shields.io/pypi/dm/ai-dlc-engineering-os)](https://pypistats.org/packages/ai-dlc-engineering-os)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Local-first](https://img.shields.io/badge/memory-local--first-success.svg)
 
-**[Quick start](#quick-start) · [How it works](#how-it-works) · [Agents](#the-26-agents) · [Documentation](#documentation) · [FAQ](#faq) · [Português](#português)**
+**[Quick start](#quick-start) · [Why not CLAUDE.md?](#why-not-just-claudemd-or-agentsmd) · [Proof](#proof-not-promises) · [How it works](#how-it-works) · [FAQ](#faq) · [Português](#português)**
 
-<img src="docs/assets/engineering-workflow.svg" alt="Engineering workflow: load project context, select specialist contracts, verify results, and retain durable knowledge." width="1100" />
+<img src="docs/assets/cross-session-demo.svg" alt="Recorded demo: session 1 saves a decision and the server refuses a credential; session 2, a new process, recalls the decision with no credential in context." width="860" />
 
-**For Claude Code, Codex and VS Code — through MCP.**
+**For Claude Code, Codex and VS Code — through MCP. Free and open source (MIT).**
 
 </div>
 
 ---
 
-Decisions, incidents and conventions should survive a coding session.
-**AI-DLC Engineering OS** gives your agents persistent project memory and
-specialist contracts, with evidence and human approval governing what becomes a rule.
+On Monday your agent learns that payment writes need idempotency keys. On Tuesday, in a new
+session or a different editor, it starts from zero. **AI-DLC Engineering OS** gives every
+MCP-capable agent on your machine the same persistent project memory, plus 26 specialist
+contracts, and nothing becomes a rule without evidence and your approval.
 
-**Free and open source (MIT).** The memory server runs locally with SQLite:
-no account, telemetry or hosted service required. Your AI client controls which
-retrieved context it sends to its model provider. Remote SDK connections and
-federation require explicit configuration.
+The memory server runs locally with SQLite: no account, telemetry or hosted service. Your AI
+client controls which retrieved context it sends to its model provider.
 
 ## Quick start
 
-### Set up your editor
-
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run
-this single command on Windows, macOS or Linux:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run this single
+command on Windows, macOS or Linux:
 
 ```bash
 uvx ai-dlc-engineering-os setup
 ```
 
-Choose Codex, Claude Code or VS Code, review the proposed changes, then confirm.
-Setup installs a persistent runtime, backs up existing configuration and memory,
-registers MCP and verifies the selected editors. Restart your editor afterward.
-VS Code must have been opened once to create its default profile.
+Choose Codex, Claude Code or VS Code, review the proposed changes, then confirm. Setup installs
+a persistent runtime, backs up existing configuration and memory, registers MCP and verifies
+the selected editors. Restart your editor afterward. VS Code must have been opened once to
+create its default profile.
 
-Published on [PyPI](https://pypi.org/project/ai-dlc-engineering-os/).
-See the [installation guide](docs/INSTALLATION.md) for previews and pinned versions.
-
-### Ask your agent
+Then just work. Open your project and ask:
 
 ```text
-Resolve this project's id and give me its engineering context.
-Identify the specialists relevant to my next change and propose a verification plan.
+What do we already know about this codebase before I change the payment flow?
 ```
 
-### Preview, update or uninstall
+For Claude Code and Codex, setup adds instructions to `CLAUDE.md` and `AGENTS.md` that tell the agent to load
+the project's decisions, lessons and open incidents before significant work. When you decide
+something worth keeping, say so ("remember that we use idempotency keys on payment writes")
+and it is available in the next session, in any configured editor.
 
-Add `--editors codex,claude --dry-run` to preview without applying changes.
-For unattended setup, explicitly choose `--editors` and add `--yes`.
+Add `--editors codex,claude --dry-run` to preview without applying changes; for unattended setup
+choose `--editors` explicitly and add `--yes`. The [installation guide](docs/INSTALLATION.md)
+covers requirements, updates, pinned versions, backups and uninstall.
 
-See the [installation guide](docs/INSTALLATION.md) for requirements, updates,
-configuration paths, source installation, backups and uninstall instructions.
+## Why not just CLAUDE.md or AGENTS.md?
+
+Keep them. They are the right place for instructions you write by hand. This adds what a static
+file cannot do well:
+
+| | Instruction file | AI-DLC Engineering OS |
+|---|---|---|
+| Who writes it | You, by hand | Agents propose; you approve rules |
+| Shared across editors | One file per tool | One local database for every configured editor |
+| Grows without bloating context | Whole file loaded every time | Only what is relevant to the task is retrieved |
+| Stale knowledge | Edited silently | Superseded with history; the repository and tests win over memory |
+| Secrets pasted by accident | Saved as written | Refused on write |
+
+## Proof, not promises
+
+Every number below comes from a command in this repository, so you can rerun it.
+
+| Check | Result | Reproduce |
+|---|---|---|
+| Cross-session recall (animation above) | Decision recalled by a new process; credential refused and absent from context | `python scripts/demo_cross_session.py` |
+| Swarm lease reliability, 500 tasks, 8 workers | 500/500 completed, 0 duplicates, 0 lost | `python benchmarks/run_reliability.py --tasks 500 --workers 8` |
+| Retrieval over 1,000 memories | 200/200 searches returned results, 104 ms mean | `ai-dlc benchmark --operations 1000 --searches 200` |
+| Test suite | 94 tests, including a real MCP stdio session | `pytest` |
+
+Measured on a 2-vCPU Linux container with Python 3.13. These are reference numbers for one
+machine, not capacity claims; see the [benchmark protocol](benchmarks/README.md). CI keeps the
+demo and both benchmarks runnable.
 
 ## What you get
 
@@ -71,25 +94,26 @@ configuration paths, source installation, backups and uninstall instructions.
 |---|---|
 | **Memory that stays true** | FTS5/BM25 + local vector search over decisions, lessons, incidents and outcomes. Superseding instead of silent overwrite. The repository and its tests always win over memory. |
 | **Safe by default** | Credentials are refused on every write. Instruction-like content is flagged and withheld from context. Hard purge for data that should not be there. |
-| **Human governance** | Agents propose; only a human approves rules and releases (`ai-dlc-admin`, interactive terminal only). |
+| **Human governance** | Agents propose; only a human approves rules (`ai-dlc-admin`, interactive terminal only). |
 | **26 specialists** | Each with a contract, procedure, checklist, output format and escalation rules. |
 | **Measured agent evolution** | Golden cases, quality/safety/non-regression gates, shadow → canary → active, hash-chained receipts, drift detection. |
-| **Swarms** | Persistent, dependency-aware task graphs with atomic leases and isolated git worktrees. |
-| **Mission Control** | Local visual control plane (`agentshield mission-control`), loopback-only. |
 
 ## How it works
 
-A typical session, driven by your agent through its MCP tools (40 enabled by default, plus 5 opt-in):
+<img src="docs/assets/engineering-workflow.svg" alt="Engineering workflow: load project context, select specialist contracts, verify results, and retain durable knowledge." width="1100" />
+
+A typical session, driven by your agent through its MCP tools:
 
 1. `resolve_project_id` → `get_project_context(project_id, task)`: relevant decisions, lessons and open incidents.
 2. `list_agents` → `get_agent_context("principal-architect", project_id)`: the right specialist, with the project's approved rules.
 3. Do the work. Persist only what is durable: `save_decision`, `record_learning`, `record_incident`.
 4. `record_task_outcome` with evidence. Learnings stay **candidates** until verified; rules need **human approval**.
 
-Memory lives in a single SQLite file (`~/.codex/ai-dlc-memory/memory.db`, WAL mode), shared by every
-host on the machine. Schema migrations are versioned and run in place with a backup first.
+Memory lives in a single SQLite file (`~/.ai-dlc/memory/memory.db`, WAL mode), shared by every
+host on the machine. Installations created before 3.2.0 keep using `~/.codex/ai-dlc-memory`
+automatically. Schema migrations are versioned and run in place with a backup first.
 Deeper dives: [Architecture](docs/ARCHITECTURE.md) · [Learning model](docs/LEARNING_MODEL.md) ·
-[Agent evolution](docs/AGENT_EVOLUTION.md) · [Platform v3](docs/PLATFORM_V3.md).
+[Agent evolution](docs/AGENT_EVOLUTION.md).
 
 ## The 26 agents
 
@@ -111,16 +135,27 @@ Setup installs these commands into the persistent uv tool environment (`uv tool 
 
 | Command | Purpose |
 |---|---|
-| `ai-dlc-install install \| uninstall \| doctor` | register, remove or check the MCP server in Codex, Claude Code and VS Code |
 | `ai-dlc-admin` | human governance: `candidates`, `rules approve/reject`, `learnings verify`, `releases`, `purge`, `merge-projects`, `export`, `backup`, `audit` |
-| `agentshield init` | add a per-repository config (`--project-mcp` also writes `.mcp.json`) |
-| `agentshield swarm …` | create, inspect and control persistent swarms |
-| `agentshield mission-control` | local visual control plane on `127.0.0.1` |
+| `ai-dlc-install install \| uninstall \| doctor` | register, remove or check the MCP server in Codex, Claude Code and VS Code |
+| `ai-dlc init` | add a per-repository config (`--project-mcp` also writes `.mcp.json`) |
+| `ai-dlc doctor` | check the local installation |
 
-Optional, off by default: federation (`AI_DLC_ENABLE_FEDERATION=1`) and marketplace
-(`AI_DLC_ENABLE_MARKETPLACE=1`). The [Python and TypeScript SDK clients](sdk/typescript/README.md)
-talk to any MCP Streamable HTTP server you point them at (`AI_DLC_REMOTE_URL`); nothing is contacted
-unless you configure it.
+<details>
+<summary><strong>Advanced: swarms, Mission Control, hooks and SDKs</strong></summary>
+
+None of these are needed for the memory workflow above.
+
+- **Swarms** (`ai-dlc swarm …`): persistent, dependency-aware task graphs with atomic leases and isolated git worktrees.
+- **Mission Control** (`ai-dlc mission-control`): local visual control plane, loopback-only by default.
+- **Hooks**: session, prompt, post-tool and stop events through the bundled plugin; they fail open.
+- **SDK clients** for [Python and TypeScript](sdk/typescript/README.md) talk to an MCP Streamable HTTP
+  server only when you point them at one (`AI_DLC_REMOTE_URL`).
+- **Federation** is off unless `AI_DLC_ENABLE_FEDERATION=1`.
+
+See [Advanced capabilities](docs/ADVANCED.md). The former `agentshield` command still works as a
+deprecated alias of `ai-dlc`.
+
+</details>
 
 ## Security model
 
@@ -153,6 +188,14 @@ a decision recorded in one is available in the others.
 </details>
 
 <details>
+<summary><strong>I installed an earlier version. Where is my memory?</strong></summary>
+
+Still in `~/.codex/ai-dlc-memory`, and it keeps being used; nothing is moved. To adopt the new
+location, close your editors and move that folder to `~/.ai-dlc/memory`.
+
+</details>
+
+<details>
 <summary><strong>Will it overwrite my existing agent or MCP configuration?</strong></summary>
 
 The installer edits its own marked block or server entry in `AGENTS.md`,
@@ -177,16 +220,15 @@ its model.
 | [Architecture](docs/ARCHITECTURE.md) | MCP hosts, SQLite, retrieval and trust boundaries |
 | [Learning model](docs/LEARNING_MODEL.md) | Evidence, verification and knowledge lifecycle |
 | [Agent evolution](docs/AGENT_EVOLUTION.md) | Evaluation gates, releases and drift |
-| [Platform v3](docs/PLATFORM_V3.md) | Swarms, Mission Control and opt-in capabilities |
-| [SDK](sdk/typescript/README.md) | Remote MCP client configuration |
+| [Advanced capabilities](docs/ADVANCED.md) | Swarms, Mission Control, hooks and opt-in features |
 | [Benchmarks](benchmarks/README.md) | Reproducible measurement protocol |
 | [Security policy](SECURITY.md) | Security controls and vulnerability reporting |
 | [Changelog](CHANGELOG.md) | Release history |
 
 ## Uninstall
 
-For the new uv setup, run the installed `ai-dlc-install uninstall --no-cli` command
-before `uv tool uninstall ai-dlc-engineering-os`. Memory is preserved.
+Run the installed `ai-dlc-install uninstall --no-cli` command before
+`uv tool uninstall ai-dlc-engineering-os`. Memory is preserved.
 See [uninstall details](docs/INSTALLATION.md#uninstall), including source-script installs.
 
 ## Contributing
@@ -199,17 +241,19 @@ Microsoft or GitHub.
 
 ## Português
 
-**AI-DLC Engineering OS** é memória de engenharia governada + 26 agentes especialistas para
-Claude Code, Codex e VS Code, via MCP. Seus agentes passam a lembrar decisões, incidentes e padrões
-do projeto — e nada vira "regra" sem evidência e aprovação humana.
+**Seus agentes de código esquecem tudo entre uma sessão e outra. O AI-DLC Engineering OS resolve isso.**
+
+Memória de engenharia local e governada + 26 agentes especialistas para Claude Code, Codex e
+VS Code, via MCP. Decisões, incidentes e padrões do projeto continuam disponíveis na próxima
+sessão e em qualquer editor configurado, e nada vira "regra" sem evidência e aprovação humana.
 
 **Gratuito e open source (MIT).** O servidor de memória roda localmente, sem conta,
-telemetria ou serviço hospedado obrigatório. Seu cliente de IA controla o envio do contexto
+telemetria ou serviço hospedado. Seu cliente de IA controla o envio do contexto
 recuperado ao provedor do modelo; conexões remotas são opcionais.
 
 ### Instalação
 
-Instale [uv](https://docs.astral.sh/uv/getting-started/installation/). No Windows,
+Instale o [uv](https://docs.astral.sh/uv/getting-started/installation/). No Windows,
 macOS ou Linux, execute:
 
 ```bash
@@ -218,7 +262,7 @@ uvx ai-dlc-engineering-os setup
 
 Escolha os editores, revise as alterações e confirme. O assistente instala um
 ambiente persistente, faz backups, registra o MCP e verifica os editores escolhidos.
-Reinicie o editor e peça: *"Resolva o id deste projeto e me dê o contexto de engenharia."*
+Reinicie o editor e pergunte: *"O que já sabemos sobre este projeto antes de eu mexer no fluxo de pagamento?"*
 
 Pacote disponível no [PyPI](https://pypi.org/project/ai-dlc-engineering-os/). Veja o
 [guia de instalação](docs/INSTALLATION.md) para atualização e desinstalação.
@@ -231,7 +275,8 @@ Pacote disponível no [PyPI](https://pypi.org/project/ai-dlc-engineering-os/). V
   exclusão definitiva (LGPD).
 - **Governança humana:** agentes propõem; só humanos aprovam (`ai-dlc-admin`, em terminal interativo).
 - **Mesma memória no Claude Code, Codex e VS Code** da sua máquina.
+- **Provado, não prometido:** demo e benchmarks reproduzíveis com um comando (veja [Proof](#proof-not-promises)).
 
 Desinstalação: siga o [guia](docs/INSTALLATION.md#uninstall). A memória é preservada.
 
-Criado por José Camargo · [@jcamarguinho](https://www.instagram.com/jcamarguinho)
+Criado por José Camargo · [LinkedIn](https://www.linkedin.com/in/joseacamargo) · [Instagram @jcamarguinho](https://www.instagram.com/jcamarguinho)

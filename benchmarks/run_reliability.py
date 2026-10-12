@@ -58,11 +58,11 @@ def run(task_count: int, workers: int) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tasks", type=int, default=1000)
+    parser.add_argument("--tasks", type=int, default=500, help="1-500, the per-swarm limit")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--output")
     args = parser.parse_args()
-    report = run(max(1, args.tasks), max(1, min(args.workers, 64)))
+    report = run(max(1, min(args.tasks, 500)), max(1, min(args.workers, 64)))
     text = json.dumps(report, indent=2)
     if args.output:
         path = Path(args.output)

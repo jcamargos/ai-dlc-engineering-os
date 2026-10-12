@@ -15,7 +15,8 @@ dependencies = ["mcp[cli]>=2,<3"]
 [project.scripts]
 ai-dlc-engineering-os = "ai_dlc_mcp.setup:main"
 ai-dlc-mcp = "ai_dlc_mcp.server:main"
-agentshield = "ai_dlc_mcp.cli:main"
+ai-dlc = "ai_dlc_mcp.cli:main"
+agentshield = "ai_dlc_mcp.cli:legacy_main"
 ai-dlc-admin = "ai_dlc_mcp.admin:main"
 ai-dlc-install = "ai_dlc_mcp.installer:main"
 

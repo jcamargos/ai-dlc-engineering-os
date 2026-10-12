@@ -26,7 +26,7 @@
         "shortDescription": "Governed agent engineering and operations.",
         "category": "Developer Tools",
         "defaultPrompt": [
-          "Route this task with AgentShield.",
+          "Route this task with AI-DLC Engineering OS.",
           "Show project memory.",
           "Create a governed swarm plan."
         ]

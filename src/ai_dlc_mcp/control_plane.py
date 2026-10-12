@@ -139,11 +139,11 @@ class ControlPlaneHandler(BaseHTTPRequestHandler):
 
 def serve_control_plane(store: MemoryStore, host: str, port: int, dashboard: Path, access_token: str | None = None) -> None:
     if host not in {"127.0.0.1", "localhost", "::1"} and not access_token:
-        raise ValueError("AGENTSHIELD_CONTROL_TOKEN is required when binding beyond loopback")
+        raise ValueError("AI_DLC_CONTROL_TOKEN is required when binding beyond loopback")
     server = ThreadingHTTPServer((host, port), ControlPlaneHandler)
     server.store = store  # type: ignore[attr-defined]
     server.dashboard = dashboard  # type: ignore[attr-defined]
     server.access_token = access_token  # type: ignore[attr-defined]
     server.loopback_only = host in {"127.0.0.1", "localhost", "::1"}  # type: ignore[attr-defined]
-    print(f"AgentShield Mission Control: http://{host}:{port}")
+    print(f"AI-DLC Mission Control: http://{host}:{port}")
     server.serve_forever()

@@ -176,12 +176,12 @@ class SwarmRuntimeMixin:
         if not (repo / ".git").exists() and not subprocess.run(["git", "-C", str(repo), "rev-parse", "--git-dir"], capture_output=True).returncode == 0:
             raise ValueError("repository must be a Git worktree")
         safe_task = re.sub(r"[^a-zA-Z0-9_-]+", "-", task_id).strip("-")[:48]
-        target_root = Path(root).resolve() if root else repo / ".agentshield" / "worktrees"
+        target_root = Path(root).resolve() if root else repo / ".ai-dlc" / "worktrees"
         target_root.mkdir(parents=True, exist_ok=True)
         target = (target_root / safe_task).resolve()
         if target_root not in target.parents:
             raise ValueError("worktree target escapes configured root")
-        branch = f"agentshield/{task['swarm_id']}/{safe_task}"
+        branch = f"ai-dlc/{task['swarm_id']}/{safe_task}"
         subprocess.run(["git", "-C", str(repo), "worktree", "add", "-b", branch, str(target), base_ref], check=True, capture_output=True, text=True)
         with self._connect() as conn:
             conn.execute("UPDATE swarm_tasks SET worktree_path=?,updated_at=? WHERE id=?", (str(target), utcnow(), task_id))

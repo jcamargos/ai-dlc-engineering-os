@@ -13,6 +13,7 @@ import subprocess
 import sys
 
 from . import __version__
+from .config import default_data_dir
 from .installer import Installer, Plan, vscode_user_dirs
 
 EDITORS = ("codex", "claude", "vscode")
@@ -49,7 +50,7 @@ def register(home: Path, python: Path, editors: list[str], dry_run: bool) -> Non
 
 
 def backup_memory(home: Path) -> None:
-    data = Path(os.getenv("AI_DLC_DATA_DIR", str(home / ".codex" / "ai-dlc-memory"))).expanduser()
+    data = default_data_dir(home)
     db = Path(os.getenv("AI_DLC_DB_PATH", str(data / "memory.db"))).expanduser().resolve()
     if not db.exists():
         return
@@ -109,7 +110,7 @@ def run(args: argparse.Namespace) -> int:
     backup_memory(home)
     register(home, python, editors, dry_run=False)
     env = dict(os.environ)
-    env.setdefault("AI_DLC_DATA_DIR", str(home / ".codex" / "ai-dlc-memory"))
+    env.setdefault("AI_DLC_DATA_DIR", str(default_data_dir(home)))
     for editor in editors:
         subprocess.run(
             [str(python), "-m", "ai_dlc_mcp.installer", "doctor", "--only", editor, "--home", str(home)],

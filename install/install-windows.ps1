@@ -1,4 +1,4 @@
-# AgentShield AI-DLC Engineering OS - global install for Codex + Claude Code (Windows).
+# AI-DLC Engineering OS - global install for Codex + Claude Code (Windows).
 # Usage (from the repository root):
 #   powershell -ExecutionPolicy Bypass -File .\install\install-windows.ps1 [-Only codex|claude] [-DryRun]
 param(
@@ -19,16 +19,22 @@ function Find-Python {
   throw "Python 3.10+ not found. Install it from https://www.python.org/downloads/ and re-run."
 }
 
-Write-Host "AgentShield AI-DLC Engineering OS -> $Target"
+Write-Host "AI-DLC Engineering OS -> $Target"
 $Py = Find-Python
 $Venv = Join-Path $Target ".venv"
 $VenvPy = Join-Path $Venv "Scripts\python.exe"
 New-Item -ItemType Directory -Force -Path $Target | Out-Null
 if (-not (Test-Path $VenvPy)) { & $Py[0] @($Py | Select-Object -Skip 1) -m venv $Venv }
 # Snapshot the memory database before an upgrade can migrate it (sqlite online backup, WAL-safe).
-$Db = Join-Path $HOME ".codex\ai-dlc-memory\memory.db"
+# Same resolution as ai_dlc_mcp.config.default_data_dir: override > ~/.ai-dlc/memory > legacy ~/.codex location.
+$Legacy = Join-Path $HOME ".codex\ai-dlc-memory"
+$Current = Join-Path $HOME ".ai-dlc\memory"
+if ($env:AI_DLC_DATA_DIR) { $Data = $env:AI_DLC_DATA_DIR }
+elseif ((Test-Path (Join-Path $Legacy "memory.db")) -and -not (Test-Path (Join-Path $Current "memory.db"))) { $Data = $Legacy }
+else { $Data = $Current }
+$Db = if ($env:AI_DLC_DB_PATH) { $env:AI_DLC_DB_PATH } else { Join-Path $Data "memory.db" }
 if (Test-Path $Db) {
-  $Snap = Join-Path $HOME (".codex\ai-dlc-memory\backups\pre-install-" + (Get-Date -Format "yyyyMMddHHmmss") + ".db")
+  $Snap = Join-Path (Split-Path $Db) ("backups\pre-install-" + (Get-Date -Format "yyyyMMddHHmmss") + ".db")
   New-Item -ItemType Directory -Force -Path (Split-Path $Snap) | Out-Null
   & $VenvPy -c "import sqlite3,sys; s=sqlite3.connect(sys.argv[1]); d=sqlite3.connect(sys.argv[2]); s.backup(d); d.close(); s.close()" $Db $Snap
   Write-Host "Memory backup: $Snap"

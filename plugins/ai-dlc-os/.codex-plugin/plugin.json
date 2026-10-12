@@ -10,7 +10,7 @@
   "interface": {
     "displayName": "AI-DLC Engineering OS",
     "shortDescription": "Route, remember, evaluate and operate agent swarms.",
-    "longDescription": "AgentShield adds governed AI-DLC memory, specialist routing, evaluation gates, persistent swarm operations and Mission Control to Codex.",
+    "longDescription": "AI-DLC Engineering OS adds governed AI-DLC memory, specialist routing, evaluation gates, persistent swarm operations and Mission Control to Codex.",
     "developerName": "AgentShield",
     "category": "Developer Tools",
     "capabilities": [
@@ -21,7 +21,7 @@
     ],
     "websiteURL": "https://agentshield.com.br",
     "defaultPrompt": [
-      "Route this task with AgentShield.",
+      "Route this task with AI-DLC Engineering OS.",
       "Show the current project memory.",
       "Create a governed swarm plan."
     ]

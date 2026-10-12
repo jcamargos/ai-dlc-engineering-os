@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+from . import __version__
 from .config import DB_PATH, WORKSPACE_ID, WORKSPACE_NAME
 from .control_plane import serve_control_plane
 from .installer import SERVER_NAME
@@ -21,6 +22,19 @@ from .store import MemoryStore
 
 def _store() -> MemoryStore:
     return MemoryStore(DB_PATH, WORKSPACE_ID, WORKSPACE_NAME)
+
+
+CONFIG_DIR = ".ai-dlc"
+LEGACY_CONFIG_DIR = ".agentshield"  # read-only fallback for repositories initialized before 3.2.0
+
+
+def repo_config_path(root: Path) -> Path | None:
+    """Return the repository config file, preferring the current name over the legacy one."""
+    for name in (CONFIG_DIR, LEGACY_CONFIG_DIR):
+        candidate = root / name / "config.json"
+        if candidate.is_file():
+            return candidate
+    return None
 
 
 def _write_json(path: Path, value: Any) -> None:
@@ -35,16 +49,17 @@ def init_command(args: argparse.Namespace) -> int:
     endpoint = args.endpoint or os.environ.get("AI_DLC_REMOTE_URL", "").strip() or None  # local-only unless explicitly configured
     max_parallel = args.max_parallel
     if sys.stdin.isatty() and not args.yes:
-        print("AgentShield initialization wizard (Enter accepts the default)")
+        print("AI-DLC initialization wizard (Enter accepts the default)")
         project_id = input(f"Project id [{project_id}]: ").strip() or project_id
         endpoint = input(f"Remote MCP endpoint, optional (blank = local only) [{endpoint or ''}]: ").strip() or endpoint
         parallel_text = input(f"Maximum parallel swarm tasks [{max_parallel}]: ").strip()
         if parallel_text:
             max_parallel = max(1, min(int(parallel_text), 64))
-    config_path = root / ".agentshield" / "config.json"
-    if config_path.exists() and not args.force:
-        print(f"Already initialized: {config_path}")
+    existing = repo_config_path(root)
+    if existing and not args.force:
+        print(f"Already initialized: {existing}")
         return 0
+    config_path = existing or root / CONFIG_DIR / "config.json"
     config = {"schema_version": 1, "project_id": project_id, "endpoint": endpoint, "memory": {"bridge": ["codex", "claude"], "vector_search": True}, "hooks": {"routing": True, "memory": True, "evaluation": True}, "swarm": {"max_parallel": max_parallel}}
     _write_json(config_path, config)
     if getattr(args, "project_mcp", False):
@@ -61,9 +76,9 @@ def init_command(args: argparse.Namespace) -> int:
         servers.setdefault(SERVER_NAME, {"command": sys.executable, "args": ["-m", "ai_dlc_mcp.server"]})
         _write_json(mcp_path, mcp_config)
     store = _store()
-    store.ensure_project(project_id, root.name, str(root), "Initialized by AgentShield CLI")
-    print(f"Initialized AgentShield in {root}")
-    print("Next: agentshield doctor")
+    store.ensure_project(project_id, root.name, str(root), "Initialized by the ai-dlc CLI")
+    print(f"Initialized AI-DLC Engineering OS in {root}")
+    print("Next: ai-dlc doctor")
     return 0
 
 
@@ -72,7 +87,8 @@ def doctor_command(args: argparse.Namespace) -> int:
     checks: list[tuple[str, bool, str]] = []
     checks.append(("python", sys.version_info >= (3, 10), platform.python_version()))
     checks.append(("git", shutil.which("git") is not None, shutil.which("git") or "not found"))
-    checks.append(("config", (root / ".agentshield" / "config.json").is_file(), str(root / ".agentshield" / "config.json")))
+    config_path = repo_config_path(root)
+    checks.append(("config", config_path is not None, str(config_path or root / CONFIG_DIR / "config.json")))
     checks.append(("mcp", (root / ".mcp.json").is_file(), str(root / ".mcp.json")))
     try:
         store = _store()
@@ -113,7 +129,7 @@ def benchmark_command(args: argparse.Namespace) -> int:
     store.ensure_project(project, "Local benchmark")
     started = time.perf_counter()
     for index in range(args.operations):
-        memory = store.save_memory(project, "benchmark", f"case-{index}", f"reliable distributed agent memory sample {index}", ["benchmark"])
+        memory = store.save_memory(project, "fact", f"case-{index}", f"reliable distributed agent memory sample {index}", ["benchmark"])
         store.index_memory(memory["id"])
     write_seconds = time.perf_counter() - started
     started = time.perf_counter()
@@ -133,7 +149,7 @@ def hook_command(args: argparse.Namespace) -> int:
         event = {}
     try:
         cwd = Path(str(event.get("cwd") or Path.cwd())).resolve()
-        config_path = next((parent / ".agentshield" / "config.json" for parent in (cwd, *cwd.parents) if (parent / ".agentshield" / "config.json").is_file()), None)
+        config_path = next((found for parent in (cwd, *cwd.parents) if (found := repo_config_path(parent))), None)
         config = json.loads(config_path.read_text(encoding="utf-8")) if config_path else {}
         store = _store()
         project_id = str(config.get("project_id") or store.resolve_project_id(str(cwd))["project_id"])
@@ -160,7 +176,7 @@ def hook_command(args: argparse.Namespace) -> int:
             selected = [agent for agent, keywords in routes if words.intersection(keywords)] or ["orchestrator"]
             with store._connect() as conn:
                 store._audit(conn, "hook.route", "session", session_hash, {"project_id": project_id, "agents": selected, "prompt_hash": hashlib.sha256(prompt.encode()).hexdigest(), "prompt_chars": len(prompt)})
-            response = {"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": "AgentShield route: " + ", ".join(selected) + ". Retrieve project context before material work and attach verification evidence."}}
+            response = {"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": "AI-DLC route: " + ", ".join(selected) + ". Retrieve project context before material work and attach verification evidence."}}
         elif args.event == "memory":
             tool_name = str(event.get("tool_name") or "unknown")[:200]
             with store._connect() as conn:
@@ -175,10 +191,10 @@ def hook_command(args: argparse.Namespace) -> int:
             gate_status = "passed" if all(gates.values()) else "evidence_required"
             with store._connect() as conn:
                 store._audit(conn, "hook.evaluate", "session", session_hash, {"project_id": project_id, "event": "stop", "gates": gates, "status": gate_status})
-            response = {"continue": True, "systemMessage": f"AgentShield evaluation: {gate_status}. Report test, security, and evidence status before claiming completion."}
+            response = {"continue": True, "systemMessage": f"AI-DLC evaluation: {gate_status}. Report test, security, and evidence status before claiming completion."}
         print(json.dumps(response, ensure_ascii=False))
     except Exception:  # noqa: BLE001 - hooks must fail open
-        print(json.dumps({"continue": True, "systemMessage": "AgentShield hook degraded safely; continue without hook automation."}))
+        print(json.dumps({"continue": True, "systemMessage": "AI-DLC hook degraded safely; continue without hook automation."}))
     return 0
 
 
@@ -189,13 +205,13 @@ def mission_control_command(args: argparse.Namespace) -> int:
         dashboard = Path(args.dashboard).resolve() if args.dashboard else source_dashboard
     if not dashboard.exists():
         raise FileNotFoundError("Mission Control dashboard asset is missing")
-    serve_control_plane(_store(), args.host, args.port, dashboard, os.getenv("AGENTSHIELD_CONTROL_TOKEN"))
+    serve_control_plane(_store(), args.host, args.port, dashboard, os.getenv("AI_DLC_CONTROL_TOKEN") or os.getenv("AGENTSHIELD_CONTROL_TOKEN"))
     return 0
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="agentshield", description="AI-DLC Engineering OS (by AgentShield) control plane")
-    parser.add_argument("--version", action="version", version="AI-DLC Engineering OS 3.1.0")
+def build_parser(prog: str = "ai-dlc") -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog=prog, description="AI-DLC Engineering OS control plane")
+    parser.add_argument("--version", action="version", version=f"AI-DLC Engineering OS {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
     init = commands.add_parser("init", help="initialize a repository")
     init.add_argument("directory", nargs="?", default="."); init.add_argument("--project-id"); init.add_argument("--endpoint"); init.add_argument("--max-parallel", type=int, default=4); init.add_argument("--force", action="store_true"); init.add_argument("--project-mcp", action="store_true", help="also register the server in this repository's .mcp.json"); init.add_argument("--yes", action="store_true", help="accept defaults without the interactive wizard"); init.set_defaults(func=init_command)
@@ -213,9 +229,15 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main() -> None:
-    args = build_parser().parse_args()
+def main(argv: list[str] | None = None, prog: str = "ai-dlc") -> None:
+    args = build_parser(prog).parse_args(argv)
     raise SystemExit(args.func(args))
+
+
+def legacy_main() -> None:
+    """``agentshield`` entry point, kept so existing scripts keep working."""
+    print("note: 'agentshield' is now 'ai-dlc'; the old name will be removed in a future major release.", file=sys.stderr)
+    main(prog="agentshield")
 
 
 if __name__ == "__main__":

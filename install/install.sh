@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# AgentShield AI-DLC Engineering OS - global install for Codex + Claude Code (macOS/Linux).
+# AI-DLC Engineering OS - global install for Codex + Claude Code (macOS/Linux).
 # Usage: ./install/install.sh [--only codex|claude] [--dry-run]
 set -eu
 SRC=$(cd "$(dirname "$0")/.." && pwd)
@@ -9,7 +9,11 @@ PY=$(command -v python3 || command -v python || true)
 "$PY" -c 'import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)' || { echo "Python 3.10+ required" >&2; exit 1; }
 mkdir -p "$TARGET"
 [ -x "$TARGET/.venv/bin/python" ] || "$PY" -m venv "$TARGET/.venv"
-DB="${AI_DLC_DB_PATH:-$HOME/.codex/ai-dlc-memory/memory.db}"
+# Same resolution as ai_dlc_mcp.config.default_data_dir: override > ~/.ai-dlc/memory > legacy ~/.codex location.
+if [ -n "${AI_DLC_DATA_DIR:-}" ]; then DATA="$AI_DLC_DATA_DIR"
+elif [ -f "$HOME/.codex/ai-dlc-memory/memory.db" ] && [ ! -f "$HOME/.ai-dlc/memory/memory.db" ]; then DATA="$HOME/.codex/ai-dlc-memory"
+else DATA="$HOME/.ai-dlc/memory"; fi
+DB="${AI_DLC_DB_PATH:-$DATA/memory.db}"
 if [ -f "$DB" ]; then
   SNAP="$(dirname "$DB")/backups/pre-install-$(date +%Y%m%d%H%M%S).db"
   mkdir -p "$(dirname "$SNAP")"

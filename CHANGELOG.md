@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.2.0 - unreleased
+
+- **One command name.** `ai-dlc` replaces `agentshield`; the old name stays as a deprecated alias
+  that prints a notice. Repository config moves to `.ai-dlc/config.json`; an existing
+  `.agentshield/config.json` is still read. Swarm worktrees and branches use the `ai-dlc` prefix.
+  `AI_DLC_CONTROL_TOKEN` is accepted alongside `AGENTSHIELD_CONTROL_TOKEN`.
+- **Editor-neutral memory location.** New installations store memory in `~/.ai-dlc/memory`.
+  Existing databases in `~/.codex/ai-dlc-memory` keep being used automatically; nothing is moved.
+- **Benchmarks fixed.** `ai-dlc benchmark` failed on an invalid memory kind, and the documented
+  reliability run exceeded the 500-task swarm limit. Both now run, and CI exercises them.
+- **Reproducible demo.** `scripts/demo_cross_session.py` shows recall across two server processes
+  and credential refusal, and renders the README animation.
+- README: problem-first hook, comparison with instruction files, measured results, advanced
+  features collapsed, PyPI badges. `docs/PLATFORM_V3.md` is now `docs/ADVANCED.md`.
+
 ## 3.1.0 - one-command setup
 
 - Add `ai-dlc-engineering-os setup`: editor selection, preview and confirmation,

@@ -10,7 +10,7 @@ ai_dlc_mcp.server  ── tool layer: annotations, validation, ToolError message
    ├── store (mixins)   memory · decisions · lessons · incidents · outcomes · rules
    │                    evolution (eval → release → receipts → drift) · swarms · vectors
    ├── agents/          26 guides + contract blocks (contracts/agent_contracts.json)
-   └── SQLite (WAL)     ~/.codex/ai-dlc-memory/memory.db, shared by every host
+   └── SQLite (WAL)     ~/.ai-dlc/memory/memory.db, shared by every host
 ```
 
 **One database, many hosts.** Every host spawns its own server process against the same file.

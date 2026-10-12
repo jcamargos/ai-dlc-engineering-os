@@ -55,6 +55,35 @@ class CliTests(unittest.TestCase):
             self.assertEqual(cli.init_command(args), 0)
         self.assertFalse((self.root / ".mcp.json").exists())
 
+    def test_init_writes_current_config_dir_in_fresh_repository(self):
+        fresh = self.root / "fresh"
+        args = argparse.Namespace(directory=str(fresh), project_id="fresh-project", endpoint=None, max_parallel=4, force=False, yes=True, project_mcp=False)
+        with patch.object(cli, "_store", return_value=self.store), redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(cli.init_command(args), 0)
+        self.assertTrue((fresh / ".ai-dlc" / "config.json").is_file())
+        self.assertFalse((fresh / ".agentshield").exists())
+        self.assertIn("ai-dlc doctor", out.getvalue())
+
+    def test_init_respects_legacy_config_dir(self):
+        args = argparse.Namespace(directory=str(self.root), project_id="cli-project", endpoint=None, max_parallel=4, force=False, yes=True, project_mcp=False)
+        with patch.object(cli, "_store", return_value=self.store), redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(cli.init_command(args), 0)
+        self.assertIn(".agentshield", out.getvalue())
+        self.assertFalse((self.root / ".ai-dlc").exists())
+
+    def test_current_config_dir_is_preferred_by_hooks(self):
+        current = self.root / ".ai-dlc" / "config.json"
+        current.parent.mkdir()
+        current.write_text(json.dumps({"project_id": "current-project"}), encoding="utf-8")
+        self.assertEqual(cli.repo_config_path(self.root), current)
+
+    def test_legacy_entry_point_warns_and_runs(self):
+        stderr = io.StringIO()
+        with patch("sys.argv", ["agentshield", "--version"]), patch("sys.stderr", stderr), redirect_stdout(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                cli.legacy_main()
+        self.assertIn("'agentshield' is now 'ai-dlc'", stderr.getvalue())
+
     def test_route_matches_whole_words_only(self):
         event = io.StringIO(json.dumps({"cwd": str(self.root), "prompt": "rebuild the guide"}))
         output = io.StringIO()
