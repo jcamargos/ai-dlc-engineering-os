@@ -1,6 +1,6 @@
 {
   "name": "ai-dlc-os",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "AI-DLC Engineering OS: governed engineering memory, 26 specialist agents, evaluation gates and swarms for Claude Code and Codex.",
   "author": {
     "name": "AgentShield",

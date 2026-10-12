@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ai-dlc-engineering-os"
-version = "3.0.2"
+version = "3.1.0"
 description = "AI-DLC Engineering OS (by AgentShield): governed engineering memory and 26 specialist agents for Claude Code, Codex and VS Code over MCP"
 authors = [{ name = "Jose Camargo" }]
 license = "MIT"
@@ -13,6 +13,7 @@ requires-python = ">=3.10"
 dependencies = ["mcp[cli]>=2,<3"]
 
 [project.scripts]
+ai-dlc-engineering-os = "ai_dlc_mcp.setup:main"
 ai-dlc-mcp = "ai_dlc_mcp.server:main"
 agentshield = "ai_dlc_mcp.cli:main"
 ai-dlc-admin = "ai_dlc_mcp.admin:main"

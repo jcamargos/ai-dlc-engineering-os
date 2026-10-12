@@ -33,36 +33,37 @@ federation require explicit configuration.
 
 ## Quick start
 
-**Requirements:** Python 3.10+ and Git. At least one of Claude Code, Codex or VS Code (GitHub Copilot
-agent mode).
+### Set up your editor
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and Git, then run
+this single command on Windows, macOS or Linux:
 
 ```bash
-git clone https://github.com/jcamargos/ai-dlc-engineering-os
-cd ai-dlc-engineering-os
-./install/install.sh                                        # macOS / Linux
+uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
 ```
 
-```powershell
-git clone https://github.com/jcamargos/ai-dlc-engineering-os
-cd ai-dlc-engineering-os
-powershell -ExecutionPolicy Bypass -File .\install\install-windows.ps1   # Windows
+Choose Codex, Claude Code or VS Code, review the proposed changes, then confirm.
+Setup installs a persistent runtime, backs up existing configuration and memory,
+registers MCP and verifies the selected editors. Restart your editor afterward.
+VS Code must have been opened once to create its default profile.
+
+The short PyPI command `uvx ai-dlc-engineering-os setup` will become available
+once the package is published there. Until then, use the GitHub command above.
+
+### Ask your agent
+
+```text
+Resolve this project's id and give me its engineering context.
+Identify the specialists relevant to my next change and propose a verification plan.
 ```
 
-The installer:
+### Preview, update or uninstall
 
-1. creates a private virtualenv in `~/.codex/ai-dlc-mcp` (nothing is installed system-wide);
-2. backs up any existing memory database before touching it;
-3. registers the `ai_dlc_os` MCP server **globally** in every host it finds:
-   - **Codex:** `~/.codex/config.toml` + `AGENTS.md`
-   - **Claude Code:** user-scope MCP, `CLAUDE.md` and 26 `ai-dlc-*` subagents
-   - **VS Code / Insiders:** user-profile `mcp.json`
-4. runs `doctor` to verify everything.
+Add `--editors codex,claude --dry-run` to preview without applying changes.
+For unattended setup, explicitly choose `--editors` and add `--yes`.
 
-It is idempotent and keeps timestamped backups of every file it edits. The
-`ai-dlc-install` CLI accepts `--only codex|claude|vscode` and `--dry-run`; the Windows
-wrapper exposes `-Only codex|claude` and `-DryRun`. Restart your editor or agent, then ask:
-
-> *"Resolve this project's id and give me its engineering context."*
+See the [installation guide](docs/INSTALLATION.md) for requirements, updates,
+configuration paths, source installation, backups and uninstall instructions.
 
 ## What you get
 
@@ -106,7 +107,7 @@ Contracts live in [`contracts/agent_contracts.json`](contracts/agent_contracts.j
 
 ## Commands
 
-Installed into the virtualenv (`~/.codex/ai-dlc-mcp/.venv/bin/` or `…\.venv\Scripts\` on Windows):
+Setup installs these commands into the persistent uv tool environment (`uv tool dir`):
 
 | Command | Purpose |
 |---|---|
@@ -172,6 +173,7 @@ its model.
 
 | Guide | Contents |
 | --- | --- |
+| [Installation](docs/INSTALLATION.md) | Setup, updates, backups and uninstall |
 | [Architecture](docs/ARCHITECTURE.md) | MCP hosts, SQLite, retrieval and trust boundaries |
 | [Learning model](docs/LEARNING_MODEL.md) | Evidence, verification and knowledge lifecycle |
 | [Agent evolution](docs/AGENT_EVOLUTION.md) | Evaluation gates, releases and drift |
@@ -183,16 +185,9 @@ its model.
 
 ## Uninstall
 
-```bash
-~/.codex/ai-dlc-mcp/.venv/bin/ai-dlc-install uninstall            # macOS / Linux
-```
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\install\uninstall-windows.ps1   # Windows
-```
-
-This removes the registrations from every host. Your memory stays in `~/.codex/ai-dlc-memory`;
-delete that folder (and `~/.codex/ai-dlc-mcp`) to remove everything.
+For the new uv setup, run the installed `ai-dlc-install uninstall --no-cli` command
+before `uv tool uninstall ai-dlc-engineering-os`. Memory is preserved.
+See [uninstall details](docs/INSTALLATION.md#uninstall), including source-script installs.
 
 ## Contributing
 
@@ -214,18 +209,19 @@ recuperado ao provedor do modelo; conexões remotas são opcionais.
 
 ### Instalação
 
-Requisitos: Python 3.10+ e Git.
+Instale [uv](https://docs.astral.sh/uv/getting-started/installation/) e Git. No Windows,
+macOS ou Linux, execute:
 
-```powershell
-git clone https://github.com/jcamargos/ai-dlc-engineering-os
-cd ai-dlc-engineering-os
-powershell -ExecutionPolicy Bypass -File .\install\install-windows.ps1   # Windows
-# macOS / Linux: ./install/install.sh
+```bash
+uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
 ```
 
-O instalador cria um ambiente isolado, faz backup da memória existente e registra o servidor
-`ai_dlc_os` globalmente no Codex, no Claude Code (com os 26 subagentes) e no VS Code. Depois, é só
-reiniciar o editor e pedir: *"Resolva o id deste projeto e me dê o contexto de engenharia."*
+Escolha os editores, revise as alterações e confirme. O assistente instala um
+ambiente persistente, faz backups, registra o MCP e verifica os editores escolhidos.
+Reinicie o editor e peça: *"Resolva o id deste projeto e me dê o contexto de engenharia."*
+
+O comando curto via PyPI ainda depende da publicação do pacote. Veja o
+[guia de instalação](docs/INSTALLATION.md) para atualização e desinstalação.
 
 ### Por que usar
 
@@ -236,7 +232,6 @@ reiniciar o editor e pedir: *"Resolva o id deste projeto e me dê o contexto de 
 - **Governança humana:** agentes propõem; só humanos aprovam (`ai-dlc-admin`, em terminal interativo).
 - **Mesma memória no Claude Code, Codex e VS Code** da sua máquina.
 
-Desinstalação: `.\install\uninstall-windows.ps1` (Windows) ou `~/.codex/ai-dlc-mcp/.venv/bin/ai-dlc-install uninstall`.
-A memória é preservada.
+Desinstalação: siga o [guia](docs/INSTALLATION.md#uninstall). A memória é preservada.
 
 Criado por José Camargo · [@jcamarguinho](https://www.instagram.com/jcamarguinho)

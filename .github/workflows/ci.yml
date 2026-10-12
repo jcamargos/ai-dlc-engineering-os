@@ -41,6 +41,12 @@ jobs:
           export AI_DLC_DATA_DIR="$RUNNER_TEMP/aidlc-data"
           python -m ai_dlc_mcp.installer install --home "$RUNNER_TEMP/home" --no-cli
           python -m ai_dlc_mcp.installer doctor --home "$RUNNER_TEMP/home"
+      - name: Build and exercise one-command setup (isolated home)
+        shell: bash
+        run: |
+          python -m pip install build uv
+          python -m build --wheel
+          python scripts/smoke_setup.py dist/*.whl
       - run: pip-audit --skip-editable
   typescript-sdk:
     runs-on: ubuntu-latest

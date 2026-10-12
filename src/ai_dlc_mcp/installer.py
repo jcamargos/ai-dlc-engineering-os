@@ -406,7 +406,8 @@ async def _handshake(python: str) -> int:
             return len(tools.tools)
 
 
-def doctor(home: Path, python: str) -> int:
+def doctor(home: Path, python: str, hosts: list[str] | None = None) -> int:
+    hosts = hosts if hosts is not None else ["codex", "claude", "vscode"]
     ok = True
 
     def check(label: str, passed: bool, hint: str = "") -> None:
@@ -425,30 +426,33 @@ def doctor(home: Path, python: str) -> int:
               f"{stats['projects']} projects, {stats['memories']} memories)", True)
     except Exception as exc:  # noqa: BLE001 - report any failure
         check("memory DB opens and migrates", False, str(exc))
-    cfg = _read(home / ".codex" / "config.toml")
-    span = _section_span(cfg, f"mcp_servers.{SERVER_NAME}")
-    check(f"Codex config registers {SERVER_NAME}", span is not None, "run: ai-dlc-install install --only codex")
-    if span:
-        m = re.search(r"command\s*=\s*['\"](.+?)['\"]", cfg[span[0]:span[1]])
-        check("Codex command points to an existing interpreter", bool(m and Path(m.group(1)).exists()),
-              "re-run ai-dlc-install install")
-    check("Codex AGENTS.md has the AgentShield block", BEGIN in _read(home / ".codex" / "AGENTS.md"))
-    claude_json = json.loads(_read(home / ".claude.json") or "{}")
-    check(f"Claude Code registers {SERVER_NAME} (user scope)", SERVER_NAME in claude_json.get("mcpServers", {}),
-          "run: ai-dlc-install install --only claude")
-    check("Claude Code CLAUDE.md has the AgentShield block", CLAUDE_BEGIN in _read(home / ".claude" / "CLAUDE.md"))
-    n = len(list((home / ".claude" / "agents").glob(f"{SUBAGENT_PREFIX}*.md")))
-    check(f"Claude Code subagents installed ({n}/{len(agent_catalog.all_specs())})", n == len(agent_catalog.all_specs()))
-    vs_dirs = vscode_user_dirs(home)
-    if not vs_dirs:
-        print("[SKIP] VS Code not detected")
-    for user_dir in vs_dirs:
-        try:
-            servers = json.loads(_read(user_dir / "mcp.json") or "{}").get("servers", {})
-        except json.JSONDecodeError:
-            servers = {}
-        check(f"VS Code ({user_dir.parent.name}) registers {SERVER_NAME}", SERVER_NAME in servers,
-              "run: ai-dlc-install install --only vscode")
+    if "codex" in hosts:
+        cfg = _read(home / ".codex" / "config.toml")
+        span = _section_span(cfg, f"mcp_servers.{SERVER_NAME}")
+        check(f"Codex config registers {SERVER_NAME}", span is not None, "run: ai-dlc-install install --only codex")
+        if span:
+            m = re.search(r"command\s*=\s*['\"](.+?)['\"]", cfg[span[0]:span[1]])
+            check("Codex command points to an existing interpreter", bool(m and Path(m.group(1)).exists()),
+                  "re-run ai-dlc-install install")
+        check("Codex AGENTS.md has the AgentShield block", BEGIN in _read(home / ".codex" / "AGENTS.md"))
+    if "claude" in hosts:
+        claude_json = json.loads(_read(home / ".claude.json") or "{}")
+        check(f"Claude Code registers {SERVER_NAME} (user scope)", SERVER_NAME in claude_json.get("mcpServers", {}),
+              "run: ai-dlc-install install --only claude")
+        check("Claude Code CLAUDE.md has the AgentShield block", CLAUDE_BEGIN in _read(home / ".claude" / "CLAUDE.md"))
+        n = len(list((home / ".claude" / "agents").glob(f"{SUBAGENT_PREFIX}*.md")))
+        check(f"Claude Code subagents installed ({n}/{len(agent_catalog.all_specs())})", n == len(agent_catalog.all_specs()))
+    if "vscode" in hosts:
+        vs_dirs = vscode_user_dirs(home)
+        if not vs_dirs:
+            print("[SKIP] VS Code not detected")
+        for user_dir in vs_dirs:
+            try:
+                servers = json.loads(_read(user_dir / "mcp.json") or "{}").get("servers", {})
+            except json.JSONDecodeError:
+                servers = {}
+            check(f"VS Code ({user_dir.parent.name}) registers {SERVER_NAME}", SERVER_NAME in servers,
+                  "run: ai-dlc-install install --only vscode")
     try:
         count = asyncio.run(_handshake(python))
         check(f"MCP stdio handshake: {count} tools, memory_stats OK", count > 0)
@@ -470,7 +474,7 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
     home, python = Path(args.home).expanduser(), str(Path(args.python))
     if args.command == "doctor":
-        return doctor(home, python)
+        return doctor(home, python, [args.only] if args.only else None)
     plan = Plan(dry_run=args.dry_run)
     inst = Installer(home, python, plan, use_cli=not args.no_cli)
     hosts = [args.only] if args.only else ["codex", "claude", "vscode"]
