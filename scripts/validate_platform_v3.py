@@ -6,7 +6,7 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "3.1.0"
+VERSION = "3.2.0"
 
 
 def require(condition: bool, message: str) -> None:

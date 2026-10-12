@@ -19,11 +19,11 @@ Append `--editors codex --yes` for unattended installation with explicit consent
 Running the setup command again repairs registrations with the selected version.
 
 The package is available on [PyPI](https://pypi.org/project/ai-dlc-engineering-os/).
-To pin this release, use `uvx --from ai-dlc-engineering-os==3.1.0 ai-dlc-engineering-os setup`.
+To pin this release, use `uvx --from ai-dlc-engineering-os==3.2.0 ai-dlc-engineering-os setup`.
 For installation directly from GitHub (requires Git), use:
 
 ```bash
-uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
+uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.2.0 ai-dlc-engineering-os setup
 ```
 
 ## What changes

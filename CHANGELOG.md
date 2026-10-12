@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.2.0 - unreleased
+## 3.2.0 - one command name and evidence-led README (2026-10-12)
 
 - **One command name.** `ai-dlc` replaces `agentshield`; the old name stays as a deprecated alias
   that prints a notice. Repository config moves to `.ai-dlc/config.json`; an existing
