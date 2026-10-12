@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
 import uuid
@@ -18,7 +19,10 @@ class AgentShieldClient:
     exception text, tracing attributes, or serialized client state.
     """
 
-    def __init__(self, endpoint: str = "https://agentshield.com.br/mcp", token: str | None = None, timeout: float = 30.0):
+    def __init__(self, endpoint: str | None = None, token: str | None = None, timeout: float = 30.0):
+        endpoint = (endpoint or os.environ.get("AI_DLC_CLOUD_URL", "")).strip()
+        if not endpoint:
+            raise AgentShieldError("endpoint is required: pass endpoint=... or set AI_DLC_CLOUD_URL")
         self.endpoint = endpoint.rstrip("/")
         self._token = token
         self.timeout = timeout
@@ -28,7 +32,7 @@ class AgentShieldClient:
     def _rpc(self, method: str, params: dict[str, Any] | None = None) -> Any:
         self._request_id += 1
         body = json.dumps({"jsonrpc": "2.0", "id": self._request_id, "method": method, "params": params or {}}).encode()
-        headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream", "User-Agent": "agentshield-python/3.0.0"}
+        headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream", "User-Agent": "agentshield-python/3.0.1"}
         if self._token:
             headers["Authorization"] = f"Bearer {self._token}"
         if self.session_id:
@@ -56,7 +60,7 @@ class AgentShieldClient:
         return envelope.get("result")
 
     def initialize(self) -> dict[str, Any]:
-        result = self._rpc("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "agentshield-python", "version": "3.0.0"}})
+        result = self._rpc("initialize", {"protocolVersion": "2025-06-18", "capabilities": {}, "clientInfo": {"name": "agentshield-python", "version": "3.0.1"}})
         return result or {}
 
     def list_tools(self) -> list[dict[str, Any]]:

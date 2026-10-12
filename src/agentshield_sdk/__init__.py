@@ -3,4 +3,4 @@
 from .client import AgentShieldClient, AgentShieldError
 
 __all__ = ["AgentShieldClient", "AgentShieldError"]
-__version__ = "3.0.0"
+__version__ = "3.0.1"

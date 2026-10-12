@@ -1,6 +1,6 @@
 {
   "name": "AI-DLC Engineering OS",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "transport": "stdio",
   "storage": "SQLite/WAL",
   "specialist_agents": [

@@ -32,12 +32,12 @@ def init_command(args: argparse.Namespace) -> int:
     root = Path(args.directory).resolve()
     root.mkdir(parents=True, exist_ok=True)
     project_id = args.project_id or _store().resolve_project_id(str(root))["project_id"]
-    endpoint = args.endpoint or "https://agentshield.com.br/mcp"
+    endpoint = args.endpoint or os.environ.get("AI_DLC_CLOUD_URL", "").strip() or None  # local-only unless explicitly configured
     max_parallel = args.max_parallel
     if sys.stdin.isatty() and not args.yes:
         print("AgentShield initialization wizard (Enter accepts the default)")
         project_id = input(f"Project id [{project_id}]: ").strip() or project_id
-        endpoint = input(f"Remote MCP endpoint [{endpoint}]: ").strip() or endpoint
+        endpoint = input(f"Remote MCP endpoint, optional (blank = local only) [{endpoint or ''}]: ").strip() or endpoint
         parallel_text = input(f"Maximum parallel swarm tasks [{max_parallel}]: ").strip()
         if parallel_text:
             max_parallel = max(1, min(int(parallel_text), 64))
@@ -195,7 +195,7 @@ def mission_control_command(args: argparse.Namespace) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="agentshield", description="AI-DLC Engineering OS (by AgentShield) control plane")
-    parser.add_argument("--version", action="version", version="AI-DLC Engineering OS 3.0.0")
+    parser.add_argument("--version", action="version", version="AI-DLC Engineering OS 3.0.1")
     commands = parser.add_subparsers(dest="command", required=True)
     init = commands.add_parser("init", help="initialize a repository")
     init.add_argument("directory", nargs="?", default="."); init.add_argument("--project-id"); init.add_argument("--endpoint"); init.add_argument("--max-parallel", type=int, default=4); init.add_argument("--force", action="store_true"); init.add_argument("--project-mcp", action="store_true", help="also register the server in this repository's .mcp.json"); init.add_argument("--yes", action="store_true", help="accept defaults without the interactive wizard"); init.set_defaults(func=init_command)
