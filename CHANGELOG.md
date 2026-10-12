@@ -2,7 +2,7 @@
 
 ## 3.0.1 - free and local by default
 
-- **No implicit remote endpoint.** The Python and TypeScript SDK clients and `ai-dlc init` no
+- **No implicit remote endpoint.** The Python and TypeScript SDK clients and `agentshield init` no
   longer default to any hosted server. Pass an endpoint explicitly or set `AI_DLC_REMOTE_URL`;
   without one, `init` configures a local-only project. Breaking only for callers that relied on
   the implicit default.
