@@ -1,36 +1,35 @@
+<div align="center">
+
 # AI-DLC Engineering OS
 
-**Governed engineering memory and 26 specialist agents for Claude Code, Codex and VS Code — over MCP.**
+### Engineering memory that carries across sessions.
+
+**26 specialists. Evidence-backed knowledge. Human-governed rules.**
 
 [![CI](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/jcamargos/ai-dlc-engineering-os)](https://github.com/jcamargos/ai-dlc-engineering-os/releases)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
-![Local-first](https://img.shields.io/badge/runs-100%25%20local-success.svg)
+![Local-first](https://img.shields.io/badge/memory-local--first-success.svg)
 
-By [AgentShield](https://agentshield.com.br) · [🇧🇷 Português](#português)
+**[Quick start](#quick-start) · [How it works](#how-it-works) · [Agents](#the-26-agents) · [Documentation](#documentation) · [FAQ](#faq) · [Português](#português)**
 
-Coding agents forget. Every session starts from zero: the decision you made last month, the incident
-that taught you to bound every retry, the convention your team agreed on. **AI-DLC Engineering OS**
-gives your agents a durable, *governed* memory and a bench of specialist agents — and nothing becomes
-a "rule" without evidence and human approval.
+<img src="docs/assets/engineering-workflow.svg" alt="Engineering workflow: load project context, select specialist contracts, verify results, and retain durable knowledge." width="1100" />
 
-```text
-Claude Code ─┐                            ┌─ memory: decisions · lessons · incidents · outcomes
-Codex ───────┼── MCP (stdio) ── ai_dlc_os ─┼─ 26 specialist agents (contracts + evaluation gates)
-VS Code ─────┘                            └─ governance: candidate → verified → human-approved
-```
+**For Claude Code, Codex and VS Code — through MCP.**
 
-**Free and open source (Apache-2.0). Runs entirely on your machine — no account, no telemetry, no
-hosted service.**
+</div>
 
 ---
 
-## Contents
+Decisions, incidents and conventions should survive a coding session.
+**AI-DLC Engineering OS** gives your agents persistent project memory and
+specialist contracts, with evidence and human approval governing what becomes a rule.
 
-[Quick start](#quick-start) · [What you get](#what-you-get) · [How it works](#how-it-works) ·
-[Agents](#the-26-agents) · [Commands](#commands) · [Security](#security-model) · [FAQ](#faq) ·
-[Uninstall](#uninstall) · [Contributing](#contributing)
+**Free and open source (MIT).** The memory server runs locally with SQLite:
+no account, telemetry or hosted service required. Your AI client controls which
+retrieved context it sends to its model provider. Remote SDK connections and
+federation require explicit configuration.
 
 ## Quick start
 
@@ -59,14 +58,15 @@ The installer:
    - **VS Code / Insiders:** user-profile `mcp.json`
 4. runs `doctor` to verify everything.
 
-It is idempotent, keeps timestamped backups of every file it edits, and accepts
-`--only codex|claude|vscode` and `--dry-run`. Restart your editor or agent, then ask:
+It is idempotent and keeps timestamped backups of every file it edits. The
+`ai-dlc-install` CLI accepts `--only codex|claude|vscode` and `--dry-run`; the Windows
+wrapper exposes `-Only codex|claude` and `-DryRun`. Restart your editor or agent, then ask:
 
 > *"Resolve this project's id and give me its engineering context."*
 
 ## What you get
 
-| | |
+| Capability | What it does |
 |---|---|
 | **Memory that stays true** | FTS5/BM25 + local vector search over decisions, lessons, incidents and outcomes. Superseding instead of silent overwrite. The repository and its tests always win over memory. |
 | **Safe by default** | Credentials are refused on every write. Instruction-like content is flagged and withheld from context. Hard purge for data that should not be there. |
@@ -78,7 +78,7 @@ It is idempotent, keeps timestamped backups of every file it edits, and accepts
 
 ## How it works
 
-A typical session, driven by your agent through its MCP tools (45, a few of them opt-in):
+A typical session, driven by your agent through its MCP tools (40 enabled by default, plus 5 opt-in):
 
 1. `resolve_project_id` → `get_project_context(project_id, task)`: relevant decisions, lessons and open incidents.
 2. `list_agents` → `get_agent_context("principal-architect", project_id)`: the right specialist, with the project's approved rules.
@@ -134,16 +134,52 @@ Report vulnerabilities privately; see [SECURITY.md](SECURITY.md).
 
 ## FAQ
 
-**Does my code or memory leave my machine?** No. Everything is local SQLite; there is no telemetry.
+<details>
+<summary><strong>Does my code or memory leave my machine?</strong></summary>
 
-**Do Claude Code and Codex share the same memory?** Yes. Every host on the machine uses the same
-database, so a decision recorded in one is available in the others.
+The MCP server stores memory locally in SQLite and has no telemetry. Your AI
+client may send retrieved context to its model provider under that client's
+configuration. Federation and remote SDK connections are opt-in.
 
-**Will it overwrite my existing `AGENTS.md`, `CLAUDE.md` or MCP config?** It edits only its own
-marked block or server entry and keeps a timestamped backup of every file it touches.
+</details>
 
-**Can an agent approve its own rules?** No. Agents can only propose; approval requires `ai-dlc-admin`
-in an interactive terminal.
+<details>
+<summary><strong>Do Claude Code and Codex share the same memory?</strong></summary>
+
+Yes. Hosts configured with the default data directory use the same database, so
+a decision recorded in one is available in the others.
+
+</details>
+
+<details>
+<summary><strong>Will it overwrite my existing agent or MCP configuration?</strong></summary>
+
+The installer edits its own marked block or server entry in `AGENTS.md`,
+`CLAUDE.md` and MCP configuration, and keeps timestamped backups.
+
+</details>
+
+<details>
+<summary><strong>Can an agent approve its own rules?</strong></summary>
+
+No. Agents can propose rules; approval requires `ai-dlc-admin` in an interactive
+terminal. Specialist contracts guide the host agent; they do not train or replace
+its model.
+
+</details>
+
+## Documentation
+
+| Guide | Contents |
+| --- | --- |
+| [Architecture](docs/ARCHITECTURE.md) | MCP hosts, SQLite, retrieval and trust boundaries |
+| [Learning model](docs/LEARNING_MODEL.md) | Evidence, verification and knowledge lifecycle |
+| [Agent evolution](docs/AGENT_EVOLUTION.md) | Evaluation gates, releases and drift |
+| [Platform v3](docs/PLATFORM_V3.md) | Swarms, Mission Control and opt-in capabilities |
+| [SDK](sdk/typescript/README.md) | Remote MCP client configuration |
+| [Benchmarks](benchmarks/README.md) | Reproducible measurement protocol |
+| [Security policy](SECURITY.md) | Security controls and vulnerability reporting |
+| [Changelog](CHANGELOG.md) | Release history |
 
 ## Uninstall
 
@@ -172,8 +208,9 @@ Microsoft or GitHub.
 Claude Code, Codex e VS Code, via MCP. Seus agentes passam a lembrar decisões, incidentes e padrões
 do projeto — e nada vira "regra" sem evidência e aprovação humana.
 
-**100% gratuito e open source (Apache-2.0).** Roda inteiro na sua máquina: sem conta, sem
-telemetria, sem serviço hospedado.
+**Gratuito e open source (MIT).** O servidor de memória roda localmente, sem conta,
+telemetria ou serviço hospedado obrigatório. Seu cliente de IA controla o envio do contexto
+recuperado ao provedor do modelo; conexões remotas são opcionais.
 
 ### Instalação
 
@@ -202,4 +239,4 @@ reiniciar o editor e pedir: *"Resolva o id deste projeto e me dê o contexto de 
 Desinstalação: `.\install\uninstall-windows.ps1` (Windows) ou `~/.codex/ai-dlc-mcp/.venv/bin/ai-dlc-install uninstall`.
 A memória é preservada.
 
-Criado por José Camargo · [@jcamarguiho](https://www.instagram.com/jcamarguiho) · [agentshield.com.br](https://agentshield.com.br)
+Criado por José Camargo · [@jcamarguiho](https://www.instagram.com/jcamarguiho)

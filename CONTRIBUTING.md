@@ -12,7 +12,7 @@ Thanks for helping improve AI-DLC Engineering OS.
   `contracts/agent_contracts.json` and run `python scripts/validate_agent_registry.py --write`.
 
 ## Developer Certificate of Origin
-Contributions are accepted under the Apache License 2.0 and the
+Contributions are accepted under the MIT License and the
 [Developer Certificate of Origin](https://developercertificate.org/): by signing off you certify
 that you wrote the change or have the right to submit it under the project's license.
 
