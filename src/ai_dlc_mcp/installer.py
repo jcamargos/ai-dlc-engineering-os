@@ -26,6 +26,7 @@ from pathlib import Path
 
 from . import __version__
 from . import agents as agent_catalog
+from . import native_agents
 
 SERVER_NAME = "ai_dlc_os"
 # Previous server keys; the installer migrates them away (config, permissions, CLI registration).
@@ -74,7 +75,7 @@ Repository + tests + authoritative docs > accepted decisions > approved rules > 
 class Plan:
     dry_run: bool = False
     actions: list[str] = field(default_factory=list)
-    stamp: str = field(default_factory=lambda: datetime.now().strftime("%Y%m%d%H%M%S"))
+    stamp: str = field(default_factory=lambda: datetime.now().strftime("%Y%m%d%H%M%S%f"))
 
     def note(self, msg: str) -> None:
         self.actions.append(msg)
@@ -200,15 +201,7 @@ def claude_server_json(python: str) -> dict:
 
 
 def render_subagent(spec: agent_catalog.AgentSpec) -> str:
-    desc = spec.description.replace('"', "'")
-    return (
-        f"---\nname: {SUBAGENT_PREFIX}{spec.name}\ndescription: \"AI-DLC Engineering OS {spec.name}: {desc}\"\n---\n"
-        f"{MANAGED_MARK}\n{spec.body.strip()}\n{agent_catalog.SHARED_INVARIANTS}\n"
-        "## Memory protocol\n"
-        "- Start: `resolve_project_id` → `get_project_context(project_id, task)` (MCP server `ai_dlc_os`).\n"
-        f"- Load approved learned rules with `get_agent_context('{spec.name}', project_id)` when the task is material.\n"
-        "- End: `record_task_outcome` with evidence; propose durable lessons as candidates only.\n"
-    )
+    return native_agents.render(spec, "claude")
 
 
 def _claude_cli() -> str | None:
@@ -248,12 +241,15 @@ class Installer:
 
     # ---- codex
     def install_codex(self) -> None:
+        self._check_agents("codex")
         cfg = self.codex / "config.toml"
         _write(self.plan, cfg, upsert_codex_config(_read(cfg), self.python), _validate_toml)
         agents_md = self.codex / "AGENTS.md"
         _write(self.plan, agents_md, upsert_block(_fix_mojibake(_read(agents_md)), SNIPPET))
+        self._sync_native_agents("codex")
 
     def uninstall_codex(self) -> None:
+        self._sync_native_agents("codex", remove_all=True)
         cfg = self.codex / "config.toml"
         if cfg.exists():
             text = _read(cfg)
@@ -300,6 +296,7 @@ class Installer:
                 _write(self.plan, path, json.dumps(data, ensure_ascii=False, indent=2) + "\n")
 
     def install_claude(self, allow_read_tools: bool = True) -> None:
+        self._check_agents("claude")
         self.register_claude_mcp()
         codex_agents = self.codex / "AGENTS.md"
         if codex_agents.exists() and BEGIN in _read(codex_agents):
@@ -346,6 +343,7 @@ class Installer:
                 _write(self.plan, path, json.dumps(data, ensure_ascii=False, indent=2) + "\n", lambda t: json.loads(t) and None)
 
     def install_vscode(self) -> None:
+        self._check_agents("vscode")
         def mutate(data: dict) -> bool:
             servers = data.setdefault("servers", {})
             before = json.dumps(servers, sort_keys=True)
@@ -354,28 +352,71 @@ class Installer:
             servers[SERVER_NAME] = vscode_server_json(self.python)
             return json.dumps(servers, sort_keys=True) != before
         self._vscode_edit(mutate)
+        if vscode_user_dirs(self.home):
+            self._sync_native_agents("vscode")
 
     def uninstall_vscode(self) -> None:
+        self._sync_native_agents("vscode", remove_all=True)
         def mutate(data: dict) -> bool:
             servers = data.get("servers", {})
             return any([servers.pop(name, None) is not None for name in ALL_SERVER_NAMES])
         self._vscode_edit(mutate)
 
-    def _sync_subagents(self, remove_all: bool = False) -> None:
-        target = self.claude_dir / "agents"
-        wanted = {} if remove_all else {f"{SUBAGENT_PREFIX}{s.name}.md": render_subagent(s) for s in agent_catalog.all_specs()}
+    # ---- native agent files, with ownership checks before any host edits
+    def _check_agents(self, host: str, check_conflicts: bool = True) -> None:
+        target = native_agents.directory(self.home, host)
+        for path in (target.parent, target):
+            if path.is_symlink() or (path.exists() and path.resolve() != path.absolute()):
+                raise ValueError(f"Agent directory must not be redirected: {path}")
+        for name in native_agents.files(host) if check_conflicts else ():
+            path = target / name
+            if path.is_symlink() or (path.exists() and native_agents.MARK not in _read(path)):
+                raise ValueError(f"User-owned agent file left untouched: {path}; rename it before installing")
+
+    def _sync_native_agents(self, host: str, remove_all: bool = False) -> None:
+        self._check_agents(host, check_conflicts=not remove_all)
+        target = native_agents.directory(self.home, host)
+        wanted = {} if remove_all else native_agents.files(host)
         if target.exists():
-            stale = [f for prefix in (SUBAGENT_PREFIX, *LEGACY_SUBAGENT_PREFIXES) for f in target.glob(f"{prefix}*.md")]
-            for f in stale:
-                if f.name not in wanted and MANAGED_MARK in _read(f):
+            prefixes = (SUBAGENT_PREFIX, *LEGACY_SUBAGENT_PREFIXES)
+            for path in sorted(target.iterdir()):
+                if (path.name.startswith(prefixes) and path.name.endswith(native_agents.SUFFIX[host])
+                        and path.name not in wanted and path.is_file() and not path.is_symlink()
+                        and native_agents.MARK in _read(path)):
                     if self.plan.dry_run:
-                        self.plan.note(f"would remove {f}")
+                        self.plan.note(f"would remove {path}")
                     else:
-                        f.unlink()
-                        self.plan.note(f"removed {f}")
-        changed = sum(_write(self.plan, target / name, body) for name, body in wanted.items())
+                        shutil.copy2(path, path.with_name(f"{path.name}.backup.{self.plan.stamp}"))
+                        path.unlink()
+                        self.plan.note(f"removed {path}")
+        changed = sum(_write(self.plan, target / name, body, _validate_toml if host == "codex" else None)
+                      for name, body in wanted.items())
         if wanted:
-            self.plan.note(f"Claude Code subagents: {len(wanted)} managed ({changed} updated) in {target}")
+            self.plan.note(f"{host} subagents: {len(wanted)} managed ({changed} updated) in {target}")
+
+    def _sync_subagents(self, remove_all: bool = False) -> None:
+        self._sync_native_agents("claude", remove_all)
+
+    # ---- Cursor (global MCP and native agents)
+    def _cursor_edit(self, remove: bool = False) -> None:
+        path = self.home / ".cursor" / "mcp.json"
+        data = json.loads(_read(path) or "{}")
+        servers = data.setdefault("mcpServers", {})
+        for name in ALL_SERVER_NAMES:
+            servers.pop(name, None)
+        if not remove:
+            servers[SERVER_NAME] = vscode_server_json(self.python)
+        if path.exists() or not remove:
+            _write(self.plan, path, json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+
+    def install_cursor(self) -> None:
+        self._check_agents("cursor")
+        self._cursor_edit()
+        self._sync_native_agents("cursor")
+
+    def uninstall_cursor(self) -> None:
+        self._cursor_edit(remove=True)
+        self._sync_native_agents("cursor", remove_all=True)
 
     def _allow_read_tools(self) -> None:
         settings = self.claude_dir / "settings.json"
@@ -453,6 +494,21 @@ def doctor(home: Path, python: str, hosts: list[str] | None = None) -> int:
                 servers = {}
             check(f"VS Code ({user_dir.parent.name}) registers {SERVER_NAME}", SERVER_NAME in servers,
                   "run: ai-dlc-install install --only vscode")
+    if "cursor" in hosts:
+        try:
+            servers = json.loads(_read(home / ".cursor" / "mcp.json") or "{}").get("mcpServers", {})
+        except json.JSONDecodeError:
+            servers = {}
+        check(f"Cursor registers {SERVER_NAME}", SERVER_NAME in servers)
+    for host in hosts:
+        if host == "vscode" and not vscode_user_dirs(home):
+            continue
+        expected = native_agents.files(host)
+        target = native_agents.directory(home, host)
+        valid = sum(_read(target / name) == body for name, body in expected.items())
+        check(f"{host} native agent definitions ({valid}/{len(expected)})", valid == len(expected),
+              "rerun setup; this checks files, not live editor discovery or delegation")
+    print("[INFO] Native discovery/delegation requires a new editor session and an explicit subagent task.")
     try:
         count = asyncio.run(_handshake(python))
         check(f"MCP stdio handshake: {count} tools, memory_stats OK", count > 0)
@@ -463,9 +519,9 @@ def doctor(home: Path, python: str, hosts: list[str] | None = None) -> int:
 
 # --------------------------------------------------------------------------- cli
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(prog="ai-dlc-install", description="Install AI-DLC Engineering OS globally for Codex, Claude Code and VS Code.")
+    p = argparse.ArgumentParser(prog="ai-dlc-install", description="Install AI-DLC Engineering OS globally for Codex, Claude Code, VS Code and Cursor.")
     p.add_argument("command", choices=["install", "uninstall", "doctor"], nargs="?", default="install")
-    p.add_argument("--only", choices=["codex", "claude", "vscode"], help="limit to one host")
+    p.add_argument("--only", choices=list(native_agents.HOSTS), help="limit to one host")
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--no-cli", action="store_true", help="edit ~/.claude.json instead of using the claude CLI")
     p.add_argument("--no-allow-read-tools", action="store_true", help="do not pre-approve read-only tools in Claude Code")
@@ -480,14 +536,17 @@ def main(argv: list[str] | None = None) -> int:
     hosts = [args.only] if args.only else ["codex", "claude", "vscode"]
     actions = {
         "install": {"codex": inst.install_codex, "claude": lambda: inst.install_claude(not args.no_allow_read_tools),
-                    "vscode": inst.install_vscode},
-        "uninstall": {"codex": inst.uninstall_codex, "claude": inst.uninstall_claude, "vscode": inst.uninstall_vscode},
+                    "vscode": inst.install_vscode, "cursor": inst.install_cursor},
+        "uninstall": {"codex": inst.uninstall_codex, "claude": inst.uninstall_claude, "vscode": inst.uninstall_vscode, "cursor": inst.uninstall_cursor},
     }
+    if args.command == "install":
+        for host in hosts:
+            inst._check_agents(host)
     for host in hosts:
         actions[args.command][host]()
     verb = "installed" if args.command == "install" else "uninstalled"
     print(f"\nAgentShield {__version__} {verb} for: {', '.join(hosts)}. Memory data is never deleted by this tool."
-          + ("\nRestart Codex / Claude Code / VS Code, then run: ai-dlc-install doctor" if args.command == "install" else ""))
+          + ("\nRestart the selected editors, then run: ai-dlc-install doctor" if args.command == "install" else ""))
     return 0
 
 

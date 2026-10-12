@@ -16,7 +16,7 @@ from . import __version__
 from .config import default_data_dir
 from .installer import Installer, Plan, vscode_user_dirs
 
-EDITORS = ("codex", "claude", "vscode")
+EDITORS = ("codex", "claude", "vscode", "cursor")
 
 
 def package_source() -> str:
@@ -35,13 +35,15 @@ def package_source() -> str:
 def select_editors(value: str) -> list[str]:
     names = list(dict.fromkeys(x.strip().lower() for x in value.split(",") if x.strip()))
     if not names or any(name not in EDITORS for name in names):
-        raise ValueError("Choose codex, claude, vscode, or a comma-separated combination.")
+        raise ValueError("Choose codex, claude, vscode, cursor, or a comma-separated combination.")
     return names
 
 
 def register(home: Path, python: Path, editors: list[str], dry_run: bool) -> None:
     # File edits provide backups and exactly the same preview/apply paths; no host CLI side effects.
     inst = Installer(home, str(python), Plan(dry_run=dry_run), use_cli=False)
+    for editor in editors:
+        inst._check_agents(editor)
     for editor in editors:
         if editor == "claude":
             inst.install_claude(allow_read_tools=False)
@@ -74,7 +76,7 @@ def run(args: argparse.Namespace) -> int:
     if args.editors:
         editors = select_editors(args.editors)
     elif sys.stdin.isatty():
-        print("Editors: codex, claude, vscode (comma-separated for multiple editors)")
+        print("Editors: codex, claude, vscode, cursor (comma-separated for multiple editors)")
         editors = select_editors(input("Configure which editors? "))
     else:
         raise ValueError("Non-interactive setup requires --editors and --yes (or --dry-run).")
@@ -126,7 +128,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--version", action="version", version=__version__)
     sub = parser.add_subparsers(dest="command", required=True)
     setup = sub.add_parser("setup", help="preview and install persistent MCP registrations")
-    setup.add_argument("--editors", help="codex, claude, vscode, or comma-separated names")
+    setup.add_argument("--editors", help="codex, claude, vscode, cursor, or comma-separated names")
     setup.add_argument("--yes", action="store_true", help="apply the displayed plan without prompting")
     setup.add_argument("--dry-run", action="store_true", help="show changes without installing or writing files")
     setup.add_argument("--source", help="install this package source instead of the matching PyPI release")

@@ -4,8 +4,12 @@
 
 Requirements: [uv](https://docs.astral.sh/uv/getting-started/installation/).
 uv can provision a compatible Python automatically. No administrator privileges
-are required. Supported editors: Codex, Claude Code and VS Code / Insiders
+are required. Supported editors in this source version: Codex, Claude Code, Cursor and VS Code / Insiders
 (default profiles). Open VS Code once before selecting it.
+
+The native Codex, Copilot and Cursor additions are not yet on PyPI. To test them,
+use the [candidate wheel instructions](NATIVE_AGENTS.md#install-the-candidate).
+The published-package commands below only provide the features of that release.
 
 ```bash
 uvx ai-dlc-engineering-os setup
@@ -30,10 +34,14 @@ uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.2.0 ai-dlc-
 
 - A persistent `ai-dlc-engineering-os` environment under `uv tool dir`; MCP
   configuration points to its Python, never the temporary uvx environment.
-- Codex: `~/.codex/config.toml` and a managed block in `~/.codex/AGENTS.md`.
+- Codex: `~/.codex/config.toml`, a managed block in `~/.codex/AGENTS.md`, and
+  26 native `~/.codex/agents/ai-dlc-*.toml` definitions.
 - Claude Code: `~/.claude.json`, a managed block in `~/.claude/CLAUDE.md`, and
   26 managed `ai-dlc-*` subagent files. Existing permissions remain unchanged.
-- VS Code / Insiders: `mcp.json` in detected default user profiles.
+- VS Code / Insiders: `mcp.json` in detected default user profiles and
+  26 personal `~/.copilot/agents/ai-dlc-*.agent.md` definitions.
+- Cursor (select explicitly): `~/.cursor/mcp.json` and 26 `~/.cursor/agents/ai-dlc-*.md` definitions.
+- See [native agent setup and verification](NATIVE_AGENTS.md).
 - Existing edited configuration files receive timestamped `.backup.*` copies.
   Existing memory receives a SQLite online backup under its adjacent `backups/`
   directory before verification opens or migrates it.
@@ -97,10 +105,13 @@ PATH if needed):
 
 ```bash
 ai-dlc-install uninstall --no-cli
+# If Cursor was configured:
+ai-dlc-install uninstall --only cursor --no-cli
 uv tool uninstall ai-dlc-engineering-os
 ```
 
 To unregister only one editor, add `--only codex`, `--only claude`, or `--only vscode`
+(or `--only cursor` for Cursor)
 to the first command and keep the shared runtime installed for remaining editors.
 
 For source-script installations, run

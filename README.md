@@ -131,6 +131,10 @@ Contracts live in [`contracts/agent_contracts.json`](contracts/agent_contracts.j
 [`src/ai_dlc_mcp/agents/`](src/ai_dlc_mcp/agents/). In Claude Code they are also available as
 `ai-dlc-*` subagents.
 
+Native subagent installation for Codex, VS Code/Copilot and Cursor is available in
+this source branch; see [native agents](docs/NATIVE_AGENTS.md) for formats, installation
+and live-editor verification. These definitions inherit your host model and permissions.
+
 ## Commands
 
 Setup installs these commands into the persistent uv tool environment (`uv tool dir`):

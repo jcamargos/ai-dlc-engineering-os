@@ -2,7 +2,7 @@
 # Usage (from the repository root):
 #   powershell -ExecutionPolicy Bypass -File .\install\install-windows.ps1 [-Only codex|claude] [-DryRun]
 param(
-  [ValidateSet("", "codex", "claude")][string]$Only = "",
+  [ValidateSet("", "codex", "claude", "vscode", "cursor")][string]$Only = "",
   [switch]$DryRun,
   [string]$Target = (Join-Path $HOME ".codex\ai-dlc-mcp")
 )
