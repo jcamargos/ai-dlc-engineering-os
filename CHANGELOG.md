@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.0 - one-command setup
+
+- Add `ai-dlc-engineering-os setup`: editor selection, preview and confirmation,
+  persistent uv tool installation, configuration and memory backups, and checks
+  limited to the selected editors. No read-tool permissions are pre-approved.
+- Add a GitHub-source one-command installation path and prepare PyPI trusted publishing.
+- Document installation, updates, verification and uninstall in a dedicated guide.
+
 ## 3.0.2 - MIT license and refreshed documentation (2026-10-12)
 
 - Change the project license to MIT, including Python, SDK and plugin metadata.
