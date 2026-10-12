@@ -35,11 +35,11 @@ federation require explicit configuration.
 
 ### Set up your editor
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and Git, then run
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run
 this single command on Windows, macOS or Linux:
 
 ```bash
-uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
+uvx ai-dlc-engineering-os setup
 ```
 
 Choose Codex, Claude Code or VS Code, review the proposed changes, then confirm.
@@ -47,8 +47,8 @@ Setup installs a persistent runtime, backs up existing configuration and memory,
 registers MCP and verifies the selected editors. Restart your editor afterward.
 VS Code must have been opened once to create its default profile.
 
-The short PyPI command `uvx ai-dlc-engineering-os setup` will become available
-once the package is published there. Until then, use the GitHub command above.
+Published on [PyPI](https://pypi.org/project/ai-dlc-engineering-os/).
+See the [installation guide](docs/INSTALLATION.md) for previews and pinned versions.
 
 ### Ask your agent
 
@@ -209,18 +209,18 @@ recuperado ao provedor do modelo; conexões remotas são opcionais.
 
 ### Instalação
 
-Instale [uv](https://docs.astral.sh/uv/getting-started/installation/) e Git. No Windows,
+Instale [uv](https://docs.astral.sh/uv/getting-started/installation/). No Windows,
 macOS ou Linux, execute:
 
 ```bash
-uvx --from git+https://github.com/jcamargos/ai-dlc-engineering-os@v3.1.0 ai-dlc-engineering-os setup
+uvx ai-dlc-engineering-os setup
 ```
 
 Escolha os editores, revise as alterações e confirme. O assistente instala um
 ambiente persistente, faz backups, registra o MCP e verifica os editores escolhidos.
 Reinicie o editor e peça: *"Resolva o id deste projeto e me dê o contexto de engenharia."*
 
-O comando curto via PyPI ainda depende da publicação do pacote. Veja o
+Pacote disponível no [PyPI](https://pypi.org/project/ai-dlc-engineering-os/). Veja o
 [guia de instalação](docs/INSTALLATION.md) para atualização e desinstalação.
 
 ### Por que usar
