@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="310" viewBox="0 0 1100 310" role="img" aria-labelledby="title desc">
+  <title id="title">AI-DLC Engineering OS workflow</title>
+  <desc id="desc">Load project context, work with specialist contracts, verify results and retain evidence-backed knowledge. Human approval governs high-risk work.</desc>
+  <rect width="1100" height="310" rx="20" fill="#101511"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <text x="40" y="44" fill="#6ee7b7" font-size="12" letter-spacing="3">AI-DLC ENGINEERING OS / LOCAL MEMORY</text>
+    <text x="40" y="83" fill="#f5f4eb" font-size="28" font-weight="600">From a task to knowledge you can reuse.</text>
+    <g fill="#19211b" stroke="#3b483e">
+      <rect x="40" y="114" width="232" height="118" rx="10"/>
+      <rect x="302" y="114" width="232" height="118" rx="10"/>
+      <rect x="564" y="114" width="232" height="118" rx="10"/>
+      <rect x="826" y="114" width="232" height="118" rx="10"/>
+    </g>
+    <g fill="#6ee7b7" font-size="12" font-weight="600">
+      <text x="60" y="140">01 / CONTEXT</text><text x="322" y="140">02 / SPECIALISTS</text>
+      <text x="584" y="140">03 / VERIFICATION</text><text x="846" y="140">04 / MEMORY</text>
+    </g>
+    <g fill="#f5f4eb" font-size="21" font-weight="600">
+      <text x="60" y="173">Know the project</text><text x="322" y="173">Scope the work</text>
+      <text x="584" y="173">Show the evidence</text><text x="846" y="173">Keep what holds up</text>
+    </g>
+    <g fill="#b8c1b8" font-size="14">
+      <text x="60" y="200">Decisions and constraints</text><text x="322" y="200">26 versioned contracts</text>
+      <text x="584" y="200">Tests, review and provenance</text><text x="846" y="200">Durable outcomes and lessons</text>
+    </g>
+    <g fill="none" stroke="#6ee7b7" stroke-width="2">
+      <path d="M280 173h14m-5-5 5 5-5 5"/><path d="M542 173h14m-5-5 5 5-5 5"/>
+      <path d="M804 173h14m-5-5 5 5-5 5"/>
+    </g>
+    <path d="M40 253h1018" stroke="#303c33"/>
+    <text x="40" y="282" fill="#b8c1b8" font-size="14">Local SQLite memory · MCP over stdio · Human-approved rules</text>
+    <text x="1058" y="282" text-anchor="end" fill="#6ee7b7" font-size="12" letter-spacing="2">CONCEPTUAL FLOW</text>
+  </g>
+</svg>
