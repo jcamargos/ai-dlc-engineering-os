@@ -78,6 +78,40 @@ def test_all_hosts_preflight_before_any_changes(tmp_path):
     assert not (tmp_path/'.codex').exists()
 
 
+def _link_directory(link, target):
+    try:
+        link.symlink_to(target, target_is_directory=True)
+    except OSError as exc:
+        pytest.skip(f'Directory symlinks unavailable: {exc}')
+
+
+def test_selected_home_alias_is_accepted(tmp_path):
+    home = tmp_path/'real-home'
+    home.mkdir()
+    alias = tmp_path/'alias-home'
+    _link_directory(alias, home)
+    inst = installer.Installer(alias, sys.executable, installer.Plan(), use_cli=False)
+    inst.install_codex()
+    inst.install_codex()
+    assert len(list((home/'.codex/agents').glob('ai-dlc-*.toml'))) == 26
+
+
+@pytest.mark.parametrize('redirect', ['.codex', '.codex/agents'])
+def test_agent_directory_redirection_remains_blocked(tmp_path, redirect):
+    home = tmp_path/'home'
+    outside = tmp_path/'outside'
+    home.mkdir()
+    outside.mkdir()
+    link = home/redirect
+    link.parent.mkdir(parents=True, exist_ok=True)
+    _link_directory(link, outside)
+    inst = installer.Installer(home, sys.executable, installer.Plan(), use_cli=False)
+    with pytest.raises(ValueError, match='must not be redirected'):
+        inst.install_codex()
+    assert not list(outside.iterdir())
+    assert not (home/'.codex/config.toml').exists()
+
+
 def test_cursor_preserves_mcp_servers_and_dry_run(tmp_path):
     path = tmp_path/'.cursor/mcp.json'
     path.parent.mkdir()
