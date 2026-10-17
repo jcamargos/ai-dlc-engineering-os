@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — native editor specialists
+
+- Generate all 26 specialist definitions for Codex, VS Code/Copilot and Cursor from the existing catalog.
+- Add explicit Cursor setup, MCP registration and uninstall. Preserve inherited models and permissions.
+- Detect unmanaged name collisions before registration, back up managed updates/removals, and verify definitions in doctor.
+- Add lifecycle, format and isolation tests; extend wheel smoke to all four clients.
+
 ## 3.2.0 - one command name and evidence-led README (2026-10-12)
 
 - **One command name.** `ai-dlc` replaces `agentshield`; the old name stays as a deprecated alias

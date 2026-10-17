@@ -32,10 +32,11 @@ def main() -> None:
             subprocess.run(list(args), env=env, check=True, timeout=300)
 
         run(uv, "tool", "run", "--python", sys.executable, "--from", str(wheel), "ai-dlc-engineering-os", "setup",
-            "--editors", "codex,claude,vscode", "--yes", "--home", str(home))
+            "--editors", "codex,claude,vscode,cursor", "--yes", "--home", str(home))
         # Editor registrations must survive removal of the launcher's cached environment.
         run(uv, "cache", "clean", "ai-dlc-engineering-os")
         python = root / "tools/ai-dlc-engineering-os" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        run(str(python), "-m", "ai_dlc_mcp.installer", "doctor", "--only", "cursor", "--home", str(home))
         run(str(python), "-m", "ai_dlc_mcp.installer", "doctor", "--home", str(home))
         print("PASS: installed wheel setup and persistent MCP work after uvx cache cleanup")
 

@@ -1,8 +1,8 @@
 """Specialist agent catalog.
 
 Each agent is a Markdown file with a small YAML-like frontmatter (name, description).
-The same files feed the MCP server (get_agent_context) and the Claude Code subagent
-generator (ai-dlc-install), so there is a single source of truth.
+The same files feed the MCP server (get_agent_context) and the native editor subagent
+generators (ai-dlc-install), so there is a single source of truth.
 """
 from __future__ import annotations
 

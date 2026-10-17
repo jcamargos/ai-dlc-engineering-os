@@ -132,6 +132,10 @@ Os contratos ficam em [`contracts/agent_contracts.json`](contracts/agent_contrac
 [`src/ai_dlc_mcp/agents/`](src/ai_dlc_mcp/agents/). No Claude Code, também estão disponíveis como
 subagentes `ai-dlc-*`.
 
+A instalação de subagentes nativos para Codex, VS Code/Copilot e Cursor está disponível
+nesta versão do código-fonte; veja [agentes nativos](docs/NATIVE_AGENTS.md) para formatos,
+instalação e verificação nos editores. As definições herdam o modelo e as permissões do cliente.
+
 ## Comandos
 
 A instalação disponibiliza estes comandos no ambiente persistente de ferramentas do uv (`uv tool dir`):
