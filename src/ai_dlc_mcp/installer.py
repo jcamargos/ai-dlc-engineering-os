@@ -364,7 +364,9 @@ class Installer:
 
     # ---- native agent files, with ownership checks before any host edits
     def _check_agents(self, host: str, check_conflicts: bool = True) -> None:
-        target = native_agents.directory(self.home, host)
+        # Canonicalize the selected root first: /var on macOS and Windows short
+        # names are valid aliases. Still reject redirection below that root.
+        target = native_agents.directory(self.home.resolve(), host)
         for path in (target.parent, target):
             if path.is_symlink() or (path.exists() and path.resolve() != path.absolute()):
                 raise ValueError(f"Agent directory must not be redirected: {path}")
