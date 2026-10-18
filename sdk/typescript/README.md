@@ -1,4 +1,4 @@
-# AgentShield TypeScript SDK
+# AI-DLC TypeScript SDK
 
 ```ts
 import { AgentShield } from "@agentshield/sdk";

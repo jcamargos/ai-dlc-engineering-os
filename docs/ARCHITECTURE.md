@@ -33,3 +33,11 @@ Mission Control binds to loopback and rejects non-loopback Host headers.
 
 **Remote clients.** The Python and TypeScript SDK clients speak MCP Streamable HTTP to any compatible
 server you choose (`AI_DLC_REMOTE_URL`); nothing is contacted unless you configure it.
+
+**Optional repository graph.** Three tools index and query file imports in Git roots
+authorized through `AI_DLC_GRAPH_ROOTS`. The source scanner has file/byte/time budgets;
+Python uses AST and JS/TS uses a labeled lexical approximation. Schema v3 adds a disposable
+workspace/project-owned snapshot with a cascading foreign key. Every query validates its
+fingerprint; stale snapshots return no edges. Project merges discard both indexes; purges
+cascade. Graphs are not injected into durable memory or exported as lessons. See
+[configuration, threat boundaries and rollback](REPOSITORY_GRAPH.md).

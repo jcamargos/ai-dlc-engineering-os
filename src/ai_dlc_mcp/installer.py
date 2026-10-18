@@ -1,4 +1,4 @@
-"""ai-dlc-install — register AI-DLC Engineering OS (by AgentShield) globally for Codex and Claude Code.
+"""ai-dlc-install — register AI-DLC Engineering OS globally for Codex and Claude Code.
 
 Idempotent, cross-platform (Windows/macOS/Linux), UTF-8 without BOM, backups
 before every edit, and a clean uninstall. Run it with the Python interpreter
@@ -42,7 +42,7 @@ READ_ONLY_TOOLS = [
     "list_projects", "resolve_project_id", "list_learning_candidates", "get_agent_scorecard",
 ]
 
-SNIPPET = """# AI-DLC Engineering OS — engineering memory, specialist agents and governance (AgentShield)
+SNIPPET = """# AI-DLC Engineering OS — engineering memory, specialist agents and governance
 
 For material engineering work, use the AI-DLC Engineering OS MCP server (`ai_dlc_os`).
 
@@ -477,12 +477,12 @@ def doctor(home: Path, python: str, hosts: list[str] | None = None) -> int:
             m = re.search(r"command\s*=\s*['\"](.+?)['\"]", cfg[span[0]:span[1]])
             check("Codex command points to an existing interpreter", bool(m and Path(m.group(1)).exists()),
                   "re-run ai-dlc-install install")
-        check("Codex AGENTS.md has the AgentShield block", BEGIN in _read(home / ".codex" / "AGENTS.md"))
+        check("Codex AGENTS.md has the AI-DLC block", BEGIN in _read(home / ".codex" / "AGENTS.md"))
     if "claude" in hosts:
         claude_json = json.loads(_read(home / ".claude.json") or "{}")
         check(f"Claude Code registers {SERVER_NAME} (user scope)", SERVER_NAME in claude_json.get("mcpServers", {}),
               "run: ai-dlc-install install --only claude")
-        check("Claude Code CLAUDE.md has the AgentShield block", CLAUDE_BEGIN in _read(home / ".claude" / "CLAUDE.md"))
+        check("Claude Code CLAUDE.md has the AI-DLC block", CLAUDE_BEGIN in _read(home / ".claude" / "CLAUDE.md"))
         n = len(list((home / ".claude" / "agents").glob(f"{SUBAGENT_PREFIX}*.md")))
         check(f"Claude Code subagents installed ({n}/{len(agent_catalog.all_specs())})", n == len(agent_catalog.all_specs()))
     if "vscode" in hosts:
@@ -547,7 +547,7 @@ def main(argv: list[str] | None = None) -> int:
     for host in hosts:
         actions[args.command][host]()
     verb = "installed" if args.command == "install" else "uninstalled"
-    print(f"\nAgentShield {__version__} {verb} for: {', '.join(hosts)}. Memory data is never deleted by this tool."
+    print(f"\nAI-DLC {__version__} {verb} for: {', '.join(hosts)}. Memory data is never deleted by this tool."
           + ("\nRestart the selected editors, then run: ai-dlc-install doctor" if args.command == "install" else ""))
     return 0
 

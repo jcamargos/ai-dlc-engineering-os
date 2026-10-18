@@ -7,6 +7,12 @@
 - Detect unmanaged name collisions before registration, back up managed updates/removals, and verify definitions in doctor.
 - Add lifecycle, format and isolation tests; extend wheel smoke to all four clients.
 
+- Optional local repository import graph: Python AST, lexical JS/TS, bounded queries,
+  freshness checks, allowlisted roots and additive schema v3 migration.
+- Spanish README, shared EN/PT-BR/ES validation and original AI-DLC artwork.
+- AI-DLC branding in runtime, installer, plugins and package presentation; legacy
+  command/import/storage identifiers retained for compatibility.
+
 ## 3.2.0 - one command name and evidence-led README (2026-10-12)
 
 - **One command name.** `ai-dlc` replaces `agentshield`; the old name stays as a deprecated alias

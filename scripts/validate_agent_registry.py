@@ -235,7 +235,7 @@ def validate(write: bool) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Validate AgentShield's canonical agent-contract registry and generated identities."
+        description="Validate AI-DLC's canonical agent-contract registry and generated identities."
     )
     parser.add_argument(
         "--write",

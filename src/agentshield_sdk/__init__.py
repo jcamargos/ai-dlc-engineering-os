@@ -1,4 +1,4 @@
-"""Small, dependency-free Python SDK for AgentShield MCP."""
+"""Small, dependency-free Python SDK for AI-DLC MCP."""
 
 from .client import AgentShieldClient, AgentShieldError
 

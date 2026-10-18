@@ -2,7 +2,9 @@
 
 # AI-DLC Engineering OS
 
-**English | [Português (Brasil)](README.pt-BR.md)**
+<img src="docs/assets/ai-dlc-social-preview.jpg" alt="AI-DLC Engineering OS" width="860" />
+
+**[English](README.md) | [Português (Brasil)](README.pt-BR.md) | [Español](README.es.md)**
 
 ### Your coding agents forget everything between sessions. This fixes that.
 
@@ -84,7 +86,7 @@ Every number below comes from a command in this repository, so you can rerun it.
 | Cross-session recall (animation above) | Decision recalled by a new process; credential refused and absent from context | `python scripts/demo_cross_session.py` |
 | Swarm lease reliability, 500 tasks, 8 workers | 500/500 completed, 0 duplicates, 0 lost | `python benchmarks/run_reliability.py --tasks 500 --workers 8` |
 | Retrieval over 1,000 memories | 200/200 searches returned results, 104 ms mean | `ai-dlc benchmark --operations 1000 --searches 200` |
-| Test suite | 94 tests, including a real MCP stdio session | `pytest` |
+| Test suite | Current suite, including real MCP stdio sessions and graph migration | `pytest` |
 
 Measured on a 2-vCPU Linux container with Python 3.13. These are reference numbers for one
 machine, not capacity claims; see the [benchmark protocol](benchmarks/README.md). CI keeps the
@@ -116,6 +118,25 @@ host on the machine. Installations created before 3.2.0 keep using `~/.codex/ai-
 automatically. Schema migrations are versioned and run in place with a backup first.
 Deeper dives: [Architecture](docs/ARCHITECTURE.md) · [Learning model](docs/LEARNING_MODEL.md) ·
 [Agent evolution](docs/AGENT_EVOLUTION.md).
+
+## Repository import graph (optional)
+
+Available in this source checkout; install this revision to use the graph. The PyPI release may lag behind main.
+
+Before editing a shared module, ask which files import it. The local graph returns
+dependencies or transitive dependents with source lines, bounded depth and coverage.
+Python uses AST parsing; JavaScript/TypeScript uses a lexical approximation.
+Every query checks freshness and refuses stale results until you refresh the index.
+
+Enable `AI_DLC_GRAPH_ROOTS` for the exact local Git roots the server may read, then
+use `index_repository_graph`, `repository_graph_status` and `query_repository_graph`.
+It is off by default, stores no source bodies, and requires no external service.
+This is a file-import graph, not a complete call graph or a measured token-saving claim.
+See the [setup, limitations and rollback guide](docs/REPOSITORY_GRAPH.md).
+
+```shell
+python scripts/demo_repository_graph.py
+```
 
 ## The 26 agents
 
@@ -158,8 +179,7 @@ None of these are needed for the memory workflow above.
   server only when you point them at one (`AI_DLC_REMOTE_URL`).
 - **Federation** is off unless `AI_DLC_ENABLE_FEDERATION=1`.
 
-See [Advanced capabilities](docs/ADVANCED.md). The former `agentshield` command still works as a
-deprecated alias of `ai-dlc`.
+See [Advanced capabilities](docs/ADVANCED.md), including legacy compatibility identifiers.
 
 </details>
 

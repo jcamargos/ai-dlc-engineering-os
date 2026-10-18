@@ -1,7 +1,7 @@
 {
   "name": "@agentshield/sdk",
   "version": "3.2.0",
-  "description": "Zero-dependency TypeScript SDK for AgentShield MCP",
+  "description": "Zero-dependency TypeScript SDK for AI-DLC MCP",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

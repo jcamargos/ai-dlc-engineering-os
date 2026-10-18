@@ -3,10 +3,10 @@
   "version": "3.2.0",
   "description": "AI-DLC Engineering OS: governed engineering memory, 26 specialist agents, evaluation gates and swarms for Claude Code and Codex.",
   "author": {
-    "name": "AgentShield",
-    "url": "https://agentshield.com.br"
+    "name": "Jose Camargo",
+    "url": "https://github.com/jcamargos/ai-dlc-engineering-os"
   },
-  "homepage": "https://agentshield.com.br",
+  "homepage": "https://github.com/jcamargos/ai-dlc-engineering-os",
   "repository": "https://github.com/jcamargos/ai-dlc-engineering-os",
   "license": "MIT",
   "keywords": [

@@ -330,6 +330,8 @@ class MemoryStoreOps:
             for pid in (src, dst):
                 if not conn.execute("SELECT 1 FROM projects WHERE id=? AND workspace_id=?", (pid, self.workspace_id)).fetchone():
                     raise KeyError(f"Project not found: {pid}")
+            conn.execute("DELETE FROM repository_graphs WHERE workspace_id=? AND project_id IN (?,?)",
+                         (self.workspace_id, src, dst))
             for table in PROJECT_CHILD_TABLES + EVOLUTION_TABLES + PLATFORM_PROJECT_TABLES:
                 moved[table] = conn.execute(f"UPDATE {table} SET project_id=? WHERE project_id=?", (dst, src)).rowcount
             if self.fts:

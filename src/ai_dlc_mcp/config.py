@@ -5,9 +5,9 @@ from pathlib import Path
 
 from . import __version__
 
-APP_NAME = "AgentShield AI-DLC Engineering OS"
+APP_NAME = "AI-DLC Engineering OS"
 AUTHOR = "Jose Camargo"
-CANONICAL_DOMAIN = "https://agentshield.com.br"
+CANONICAL_DOMAIN = "https://github.com/jcamargos/ai-dlc-engineering-os"
 VERSION = __version__
 
 WORKSPACE_ID = os.getenv("AI_DLC_WORKSPACE_ID", "local")

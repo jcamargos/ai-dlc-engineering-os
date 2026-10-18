@@ -71,10 +71,13 @@
     "control_swarm",
     "claim_swarm_task",
     "complete_swarm_task",
-    "create_swarm_worktree"
+    "create_swarm_worktree",
+    "index_repository_graph",
+    "repository_graph_status",
+    "query_repository_graph"
   ],
   "author": "Jose Camargo",
-  "canonical_domain": "https://agentshield.com.br",
+  "canonical_domain": "https://github.com/jcamargos/ai-dlc-engineering-os",
   "admin_cli": "ai-dlc-admin",
   "installer": "ai-dlc-install",
   "optional_mcp_tools": {

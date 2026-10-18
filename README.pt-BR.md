@@ -2,7 +2,9 @@
 
 # AI-DLC Engineering OS
 
-**[English](README.md) | Português (Brasil)**
+<img src="docs/assets/ai-dlc-social-preview.jpg" alt="AI-DLC Engineering OS" width="860" />
+
+**[English](README.md) | [Português (Brasil)](README.pt-BR.md) | [Español](README.es.md)**
 
 ### Seus agentes de código esquecem tudo entre sessões. Isso resolve o problema.
 
@@ -85,7 +87,7 @@ Cada número abaixo vem de um comando deste repositório que você pode executar
 | Recuperação entre sessões (animação acima) | Decisão recuperada por outro processo; credencial recusada e ausente do contexto | `python scripts/demo_cross_session.py` |
 | Confiabilidade das reservas de tarefas do swarm, 500 tarefas, 8 workers | 500/500 concluídas, 0 duplicadas, 0 perdidas | `python benchmarks/run_reliability.py --tasks 500 --workers 8` |
 | Busca em 1.000 memórias | 200/200 buscas com resultados, média de 104 ms | `ai-dlc benchmark --operations 1000 --searches 200` |
-| Suíte de testes | 94 testes, incluindo uma sessão MCP real por stdio | `pytest` |
+| Suíte de testes | Suíte atual, incluindo MCP real por stdio e migração do grafo | `pytest` |
 
 Medições em um contêiner Linux com 2 vCPUs e Python 3.13. São referências de uma máquina,
 não garantias de capacidade; consulte o [protocolo de benchmarks](benchmarks/README.md).
@@ -117,6 +119,25 @@ pelos clientes na máquina. Instalações anteriores à 3.2.0 continuam usando `
 automaticamente. As migrações de esquema são versionadas e executadas no mesmo banco, com backup prévio.
 Saiba mais: [Arquitetura](docs/ARCHITECTURE.md) · [Modelo de aprendizado](docs/LEARNING_MODEL.md) ·
 [Evolução dos agentes](docs/AGENT_EVOLUTION.md).
+
+## Grafo de importações do repositório (opcional)
+
+Disponível neste checkout; instale esta revisão para usar o grafo. A versão do PyPI pode estar atrás da main.
+
+Antes de alterar um módulo compartilhado, descubra quais arquivos o importam.
+O grafo local retorna dependências ou dependentes transitivos com linhas de origem,
+profundidade limitada e cobertura. Python usa AST; JavaScript/TypeScript usa uma
+aproximação léxica. Cada consulta verifica a atualização e recusa resultados antigos.
+
+Configure `AI_DLC_GRAPH_ROOTS` com as raízes Git locais autorizadas e use
+`index_repository_graph`, `repository_graph_status` e `query_repository_graph`.
+O acesso fica desativado por padrão, não armazena corpos de código e não exige serviço externo.
+É um grafo de importações, não um grafo completo de chamadas nem uma promessa medida de economia de tokens.
+Consulte o [guia de configuração, limitações e reversão](docs/REPOSITORY_GRAPH.md).
+
+```shell
+python scripts/demo_repository_graph.py
+```
 
 ## Os 26 agentes
 
@@ -159,8 +180,7 @@ Esses recursos são opcionais para o fluxo de memória descrito acima.
   apenas quando você configura um destino (`AI_DLC_REMOTE_URL`).
 - **Federação** fica desativada, salvo quando `AI_DLC_ENABLE_FEDERATION=1`.
 
-Consulte os [recursos avançados](docs/ADVANCED.md). O antigo comando `agentshield` continua
-funcionando como alias obsoleto de `ai-dlc`.
+Consulte os [recursos avançados](docs/ADVANCED.md), incluindo identificadores antigos mantidos por compatibilidade.
 
 </details>
 

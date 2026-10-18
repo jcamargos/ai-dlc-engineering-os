@@ -28,7 +28,7 @@ def test_installed_server_contract_and_project_round_trip(tmp_path):
             async with stdio_client(server) as (reader, writer):
                 async with ClientSession(reader, writer, read_timeout_seconds=10) as session:
                     initialized = await session.initialize()
-                    assert initialized.server_info.name == "AgentShield AI-DLC Engineering OS"
+                    assert initialized.server_info.name == "AI-DLC Engineering OS"
                     actual = await session.list_tools()
                     expected = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
                     assert {tool.name for tool in actual.tools} == set(expected["mcp_tools"])
