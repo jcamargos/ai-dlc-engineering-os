@@ -4,9 +4,10 @@ from ._store_search import MemoryStoreSearch
 from ._store_evolution import MemoryStoreEvolution
 from .swarm import SwarmRuntimeMixin
 from .vector_memory import VectorMemoryMixin
+from ._store_graph import MemoryStoreGraph
 
 __all__ = ["SCHEMA_VERSION", "MemoryHit", "MemoryStore"]
 
 
-class MemoryStore(MemoryStoreBase, MemoryStoreOps, MemoryStoreSearch, MemoryStoreEvolution, VectorMemoryMixin, SwarmRuntimeMixin):
+class MemoryStore(MemoryStoreBase, MemoryStoreOps, MemoryStoreSearch, MemoryStoreEvolution, VectorMemoryMixin, SwarmRuntimeMixin, MemoryStoreGraph):
     """Local AI-DLC Engineering OS store: governed memory, FTS5 + vector retrieval, agent evolution, swarms."""

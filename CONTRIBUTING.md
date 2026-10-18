@@ -8,8 +8,9 @@ Thanks for helping improve AI-DLC Engineering OS.
 - Every change needs tests and must keep these green: `ruff check src tests scripts`,
   `python scripts/validate_agent_registry.py`, `python scripts/validate_platform_v3.py`, `pytest`.
 - Never commit secrets, real customer data or production identifiers.
-- Keep `README.md` (English) and `README.pt-BR.md` (Brazilian Portuguese) synchronized
+- Keep `README.md` (English), `README.pt-BR.md` (Brazilian Portuguese) and `README.es.md` (Spanish) synchronized
   when changing features, commands, requirements, version details or examples.
+  Run `python scripts/validate_readmes.py` to verify local links and shared feature coverage.
 - Agent guides (`src/ai_dlc_mcp/agents/*.md`) carry a generated contract block; edit
   `contracts/agent_contracts.json` and run `python scripts/validate_agent_registry.py --write`.
 

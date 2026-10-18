@@ -1,5 +1,5 @@
 <!-- AI-DLC-MCP:BEGIN -->
-# AI-DLC Engineering OS — engineering memory, specialist agents and governance (AgentShield)
+# AI-DLC Engineering OS — engineering memory, specialist agents and governance
 
 For material engineering work, use the AI-DLC Engineering OS MCP server (`ai_dlc_os`).
 

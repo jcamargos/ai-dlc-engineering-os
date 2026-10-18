@@ -38,7 +38,7 @@ from .security import (
 
 log = logging.getLogger("ai_dlc_mcp.store")
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 GLOBAL = ""  # project_id value used in the search index for global memory
 
 ENTITY_TABLES = {
@@ -236,6 +236,14 @@ CREATE INDEX IF NOT EXISTS idx_federation_messages_target ON federation_messages
 CREATE INDEX IF NOT EXISTS idx_marketplace_items ON marketplace_items(workspace_id, kind, name);
 """
 
+GRAPH_V3_SCHEMA = """
+CREATE UNIQUE INDEX IF NOT EXISTS idx_projects_workspace_id ON projects(workspace_id,id);
+CREATE TABLE IF NOT EXISTS repository_graphs (
+  workspace_id TEXT NOT NULL, project_id TEXT NOT NULL, repo_path TEXT NOT NULL, graph_json TEXT NOT NULL,
+  PRIMARY KEY(workspace_id,project_id),
+  FOREIGN KEY(workspace_id,project_id) REFERENCES projects(workspace_id,id) ON DELETE CASCADE);
+"""
+
 # (table, column, ddl) added in schema v1
 V1_COLUMNS = [
     ("memories", "content_hash", "TEXT"),
@@ -317,6 +325,9 @@ class MemoryStoreBase:
                     self._migrate_v1(conn)
                 if version < 2:
                     for stmt in filter(None, (x.strip() for x in PLATFORM_V2_SCHEMA.split(";"))):
+                        conn.execute(stmt)
+                if version < 3:
+                    for stmt in filter(None, (x.strip() for x in GRAPH_V3_SCHEMA.split(";"))):
                         conn.execute(stmt)
                 if version < SCHEMA_VERSION:
                     conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
