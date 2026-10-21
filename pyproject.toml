@@ -7,7 +7,7 @@ name = "ai-dlc-engineering-os"
 version = "3.2.0"
 description = "AI-DLC Engineering OS: governed engineering memory and 26 specialist agents for Claude Code, Codex and VS Code over MCP"
 authors = [{ name = "Jose Camargo" }]
-license = "MIT"
+license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["mcp[cli]>=2,<3"]

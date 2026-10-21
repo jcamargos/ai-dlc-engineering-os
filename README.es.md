@@ -12,14 +12,14 @@
 
 [![CI](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/ai-dlc-engineering-os)](https://pypi.org/project/ai-dlc-engineering-os/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 
 **[Inicio rápido](#inicio-rápido) · [Evidencias](#evidencias) · [Cómo funciona](#cómo-funciona) · [Preguntas frecuentes](#preguntas-frecuentes)**
 
 <img src="docs/assets/cross-session-demo.svg" alt="Una sesión guarda una decisión; otra la recupera. Se rechaza una credencial." width="860" />
 
-**Para Claude Code, Codex y VS Code mediante MCP. Gratuito y de código abierto (MIT).**
+**Para Claude Code, Codex y VS Code mediante MCP. Gratuito y de código abierto (Apache 2.0).**
 
 </div>
 
