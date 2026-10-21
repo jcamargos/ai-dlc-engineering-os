@@ -91,6 +91,6 @@
       "list_marketplace_items"
     ]
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": "https://github.com/jcamargos/ai-dlc-engineering-os"
 }

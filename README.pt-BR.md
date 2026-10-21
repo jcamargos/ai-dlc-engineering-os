@@ -13,7 +13,7 @@
 [![CI](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/ai-dlc-engineering-os)](https://pypi.org/project/ai-dlc-engineering-os/)
 [![Downloads](https://img.shields.io/pypi/dm/ai-dlc-engineering-os)](https://pypistats.org/packages/ai-dlc-engineering-os)
-[![Licença: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Licença: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Memória local](https://img.shields.io/badge/memory-local--first-success.svg)
 
@@ -21,7 +21,7 @@
 
 <img src="docs/assets/cross-session-demo.svg" alt="Demonstração gravada: a sessão 1 salva uma decisão e o servidor recusa uma credencial; a sessão 2, em outro processo, recupera a decisão sem a credencial no contexto." width="860" />
 
-**Para Claude Code, Codex e VS Code — via MCP. Gratuito e open source (MIT).**
+**Para Claude Code, Codex e VS Code — via MCP. Gratuito e open source (Apache 2.0).**
 
 </div>
 

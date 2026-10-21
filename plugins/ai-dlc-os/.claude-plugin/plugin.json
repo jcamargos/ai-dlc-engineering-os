@@ -7,7 +7,7 @@
   },
   "homepage": "https://github.com/jcamargos/ai-dlc-engineering-os",
   "repository": "https://github.com/jcamargos/ai-dlc-engineering-os",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "keywords": [
     "ai-dlc",
     "mcp",

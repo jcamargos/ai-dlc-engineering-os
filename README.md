@@ -13,7 +13,7 @@
 [![CI](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jcamargos/ai-dlc-engineering-os/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/ai-dlc-engineering-os)](https://pypi.org/project/ai-dlc-engineering-os/)
 [![Downloads](https://img.shields.io/pypi/dm/ai-dlc-engineering-os)](https://pypistats.org/packages/ai-dlc-engineering-os)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Local-first](https://img.shields.io/badge/memory-local--first-success.svg)
 
@@ -21,7 +21,7 @@
 
 <img src="docs/assets/cross-session-demo.svg" alt="Recorded demo: session 1 saves a decision and the server refuses a credential; session 2, a new process, recalls the decision with no credential in context." width="860" />
 
-**For Claude Code, Codex and VS Code — through MCP. Free and open source (MIT).**
+**For Claude Code, Codex and VS Code — through MCP. Free and open source (Apache 2.0).**
 
 </div>
 
