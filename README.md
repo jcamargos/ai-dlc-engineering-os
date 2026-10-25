@@ -240,6 +240,11 @@ its model.
 
 ## Documentation
 
+**Verified execution:** `ai-dlc verify` binds command evidence to the intended repository
+and current files. `ai-dlc eval` grades six behavioral scenarios; `ai-dlc swarm recover`
+resumes context from existing task state. [Workflow and limits](docs/VERIFIED_EXECUTION.md).
+Fixture tests validate the evaluator; live agent effectiveness and token savings remain unmeasured.
+
 | Guide | Contents |
 | --- | --- |
 | [Installation](docs/INSTALLATION.md) | Setup, updates, backups and uninstall |

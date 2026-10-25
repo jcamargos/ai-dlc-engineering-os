@@ -83,6 +83,35 @@ class SwarmRuntimeMixin:
             result["tasks"].append(item)
         return result
 
+    def get_swarm_recovery(self, swarm_id: str) -> dict[str, Any]:
+        """Read-only recovery view; the atomic claim operation remains authoritative."""
+        run = self.get_swarm(swarm_id)
+        completed = {task["id"] for task in run["tasks"] if task["status"] == "completed"}
+        now = utcnow()
+        groups: dict[str, list] = {name: [] for name in ("completed", "ready", "active", "blocked", "terminal")}
+        for task in run["tasks"]:
+            item = {key: task[key] for key in ("id", "title", "agent_name", "status", "attempt", "worktree_path")}
+            if task["status"] == "completed":
+                item["output"] = task["output"]
+                groups["completed"].append(item)
+            elif task["status"] in {"failed", "cancelled"}:
+                item["error"] = task["error"]
+                groups["terminal"].append(item)
+            elif task["status"] in {"leased", "running"} and (
+                not task["lease_expires_at"] or task["lease_expires_at"] > now
+            ):
+                item.update({key: task[key] for key in ("lease_owner", "lease_expires_at")})
+                groups["active"].append(item)
+            else:
+                item["unmet_dependencies"] = [dep for dep in task["depends_on"] if dep not in completed]
+                group = "ready" if run["status"] == "running" and not item["unmet_dependencies"] else "blocked"
+                groups[group].append(item)
+        return {"id": run["id"], "project_id": run["project_id"], "status": run["status"],
+                "objective": run["objective"], "metadata": run["metadata"], "as_of": now, **groups,
+                "available_slots": max(0, run["max_parallel"] - len(groups["active"])) if run["status"] == "running" else 0,
+                "next_action": "Claim a ready task atomically with worker_id; recheck repository and evidence. "
+                               "Do not redispatch completed tasks. This view does not resume a paused swarm or renew leases."}
+
     def set_swarm_state(self, swarm_id: str, action: str, reason: str = "") -> dict[str, Any]:
         transitions = {"pause": ("paused", {"running"}), "resume": ("running", {"paused"}), "cancel": ("cancelled", {"created", "running", "paused"})}
         if action not in transitions:
