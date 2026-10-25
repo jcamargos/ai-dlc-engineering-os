@@ -18,6 +18,7 @@ from mcp.server.mcpserver.exceptions import ToolError
 from mcp.types import ToolAnnotations
 
 from . import agents as agent_catalog
+from . import workflows
 from .config import ALLOW_AGENT_PURGE, APP_NAME, ENABLE_FEDERATION, ENABLE_MARKETPLACE, DB_PATH, LOG_LEVEL, VERSION, WORKSPACE_ID, WORKSPACE_NAME
 from .store import MemoryStore
 
@@ -219,8 +220,8 @@ def list_agents() -> list[dict[str, str]]:
 
 
 @tool(READ)
-def get_agent_context(agent_name: str, project_id: str = "") -> str:
-    """Load a specialist agent's instructions plus human-approved learned rules for it (and the project)."""
+def get_agent_context(agent_name: str, project_id: str = "", workflow: str = "") -> str:
+    """Load specialist instructions and approved rules; optionally select discover, plan, implement, debug, review or finish."""
     name = re.sub(r"[^a-z0-9_-]", "", (agent_name or "").lower())
     spec = agent_catalog.load(name)
     if spec is None:
@@ -228,6 +229,8 @@ def get_agent_context(agent_name: str, project_id: str = "") -> str:
         raise ValueError(f"Unknown agent '{agent_name}'. Available: {available}")
     rules = store().approved_rules(name, project_id or None)
     body = spec.body + agent_catalog.SHARED_INVARIANTS
+    if workflow:
+        body += "\n" + workflows.load(workflow)
     if not rules:
         return body
     return body + "\n## Approved learned rules (human-approved)\n" + "\n".join(

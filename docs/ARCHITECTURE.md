@@ -1,5 +1,11 @@
 # Architecture (local edition)
 
+**Native procedures.** `ai_dlc_mcp.workflows` owns six bundled phase resources shared
+by CLI and the optional `get_agent_context(..., workflow=...)` parameter. A short
+router reaches every native agent through shared invariants. Only an allowlisted
+phase is read; no external plugin, executor or database mutation is involved.
+See [workflow contracts and limits](NATIVE_WORKFLOWS.md).
+
 ```text
 MCP host (Claude Code · Codex · VS Code)
    │  stdio, one process per host session

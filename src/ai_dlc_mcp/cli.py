@@ -18,7 +18,7 @@ from .config import DB_PATH, WORKSPACE_ID, WORKSPACE_NAME
 from .control_plane import serve_control_plane
 from .installer import SERVER_NAME
 from .store import MemoryStore
-from . import behavioral_evals, verification
+from . import behavioral_evals, verification, workflows
 
 
 def _store() -> MemoryStore:
@@ -218,6 +218,7 @@ def build_parser(prog: str = "ai-dlc") -> argparse.ArgumentParser:
     commands = parser.add_subparsers(dest="command", required=True)
     verification.add_parser(commands)
     behavioral_evals.add_parser(commands)
+    workflows.add_parser(commands)
     init = commands.add_parser("init", help="initialize a repository")
     init.add_argument("directory", nargs="?", default="."); init.add_argument("--project-id"); init.add_argument("--endpoint"); init.add_argument("--max-parallel", type=int, default=4); init.add_argument("--force", action="store_true"); init.add_argument("--project-mcp", action="store_true", help="also register the server in this repository's .mcp.json"); init.add_argument("--yes", action="store_true", help="accept defaults without the interactive wizard"); init.set_defaults(func=init_command)
     doctor = commands.add_parser("doctor", help="validate local installation")

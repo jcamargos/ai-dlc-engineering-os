@@ -38,6 +38,9 @@ def main() -> None:
         python = root / "tools/ai-dlc-engineering-os" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
         run(str(python), "-m", "ai_dlc_mcp.installer", "doctor", "--only", "cursor", "--home", str(home))
         run(str(python), "-m", "ai_dlc_mcp.installer", "doctor", "--home", str(home))
+        run(str(python), "-c", "from ai_dlc_mcp.workflows import catalog, load; "
+            "assert len(catalog()) == 6; "
+            "assert all(load(item['name']).startswith('# Native workflow:') for item in catalog())")
         print("PASS: installed wheel setup and persistent MCP work after uvx cache cleanup")
 
 
