@@ -165,6 +165,12 @@ instalação e verificação nos editores. As definições herdam o modelo e as 
 
 ## Comandos
 
+**Procedimentos nativos de engenharia:** descoberta, planejamento, implementação com
+testes de regressão, depuração sistemática, revisão e entrega verificada. Carregue apenas
+a etapa atual com `ai-dlc workflow show debug` (lista: `ai-dlc workflow list`), ou use
+`get_agent_context` com `workflow="debug"`. Incluídos no AI-DLC; não exigem instalação
+do Superpowers. Veja [procedimentos, evidências e limites](docs/NATIVE_WORKFLOWS.md).
+
 A instalação disponibiliza estes comandos no ambiente persistente de ferramentas do uv (`uv tool dir`):
 
 | Comando | Finalidade |

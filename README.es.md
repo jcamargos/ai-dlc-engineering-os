@@ -153,6 +153,12 @@ Estas definiciones heredan el modelo y los permisos del cliente.
 
 ## Comandos
 
+**Procedimientos nativos de ingeniería:** descubrimiento, planificación, implementación
+con pruebas de regresión, depuración sistemática, revisión y entrega verificada. Carga
+solo la etapa actual con `ai-dlc workflow show debug` (lista: `ai-dlc workflow list`),
+o usa `get_agent_context` con `workflow="debug"`. Incluidos en AI-DLC; no requieren
+instalar Superpowers. Consulta [procedimientos, evidencias y límites](docs/NATIVE_WORKFLOWS.md).
+
 | Comando | Finalidad |
 |---|---|
 | `ai-dlc-admin` | Revisar candidatos y reglas, verificar lecciones, administrar releases, exportar, respaldar y auditar |

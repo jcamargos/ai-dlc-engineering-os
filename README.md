@@ -158,6 +158,12 @@ and live-editor verification. These definitions inherit your host model and perm
 
 ## Commands
 
+**Native engineering workflows:** discovery, planning, implementation with regression
+checks, systematic debugging, review and verified delivery. Load only the current
+phase with `ai-dlc workflow show debug` (list: `ai-dlc workflow list`), or request
+`get_agent_context` with `workflow="debug"`. Built into AI-DLC; no Superpowers
+installation required. See [procedures, evidence and limits](docs/NATIVE_WORKFLOWS.md).
+
 Setup installs these commands into the persistent uv tool environment (`uv tool dir`):
 
 | Command | Purpose |

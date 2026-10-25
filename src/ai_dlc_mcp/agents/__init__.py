@@ -22,6 +22,15 @@ SHARED_INVARIANTS = """
 - Stay inside the agreed objective and scope; ask before expanding either.
 - Irreversible or R3 actions (production data, deletes, deploys, credentials) require explicit human approval.
 - Persist only durable, evidence-backed knowledge (decisions, verified lessons, incidents, outcomes).
+
+## Native workflow selection
+For material work, load only the procedure relevant to the current phase using
+`get_agent_context(agent_name, project_id, workflow="plan")` or `ai-dlc workflow show plan`.
+Available phases: discover (unclear requirements/design), plan (task decomposition),
+implement (behavior changes and regression checks), debug (unexpected behavior),
+review (requirements and quality), finish (verified delivery and recovery record).
+Reuse a procedure already loaded for this phase; do not recursively reload your context.
+Small, clear edits can proceed directly with a proportional verification check.
 """
 
 _FM = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.S)

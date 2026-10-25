@@ -32,6 +32,25 @@ def test_installed_server_contract_and_project_round_trip(tmp_path):
                     actual = await session.list_tools()
                     expected = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
                     assert {tool.name for tool in actual.tools} == set(expected["mcp_tools"])
+                    agent_tool = next(tool for tool in actual.tools if tool.name == "get_agent_context")
+                    assert "workflow" in agent_tool.input_schema["properties"]
+                    baseline = await session.call_tool("get_agent_context", {"agent_name": "backend"})
+                    assert not baseline.is_error
+                    base_text = "".join(item.text for item in baseline.content if item.type == "text")
+                    assert "# Native workflow:" not in base_text
+                    for phase in ("discover", "plan", "implement", "debug", "review", "finish"):
+                        loaded = await session.call_tool("get_agent_context", {
+                            "agent_name": "backend", "workflow": phase,
+                        })
+                        assert not loaded.is_error
+                        text = "".join(item.text for item in loaded.content if item.type == "text")
+                        assert base_text in text
+                        assert text.count("# Native workflow:") == 1
+                        assert f"# Native workflow: {phase}" in text
+                    invalid = await session.call_tool("get_agent_context", {
+                        "agent_name": "backend", "workflow": "../agents/backend",
+                    })
+                    assert invalid.is_error
                     created = await session.call_tool("bootstrap_project", {
                         "project_id": "isolated-probe", "name": "Ephemeral verification project",
                     })
