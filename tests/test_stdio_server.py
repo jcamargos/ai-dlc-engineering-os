@@ -43,5 +43,16 @@ def test_installed_server_contract_and_project_round_trip(tmp_path):
                     assert "isolated-probe" in "".join(
                         item.text for item in context.content if item.type == "text"
                     )
+                    created_swarm = await session.call_tool("create_swarm", {
+                        "project_id": "isolated-probe", "objective": "Resume fixture",
+                        "tasks": [{"id": "stdio-task"}],
+                    })
+                    assert not created_swarm.is_error
+                    run = created_swarm.structured_content or json.loads(created_swarm.content[0].text)
+                    recovered = await session.call_tool("get_swarm", {"swarm_id": run["id"], "recovery": True})
+                    assert not recovered.is_error
+                    view = recovered.structured_content or json.loads(recovered.content[0].text)
+                    assert view["ready"][0]["id"] == "stdio-task"
+                    assert view["completed"] == []
 
     anyio.run(probe)

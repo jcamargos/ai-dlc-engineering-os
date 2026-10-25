@@ -2,6 +2,11 @@
 
 ## Unreleased — native editor specialists
 
+- Add opt-in repository preflight and fresh command receipts (`ai-dlc verify`).
+- Add six behavioral scenarios, ordered trace grading and explicit imports into existing evaluations (`ai-dlc eval`).
+- Add read-only swarm recovery over existing leases; refine proportional routing and evidence guidance.
+- Distinguish synthetic evaluator tests from unmeasured live agent performance.
+
 - Generate all 26 specialist definitions for Codex, VS Code/Copilot and Cursor from the existing catalog.
 - Add explicit Cursor setup, MCP registration and uninstall. Preserve inherited models and permissions.
 - Detect unmanaged name collisions before registration, back up managed updates/removals, and verify definitions in doctor.

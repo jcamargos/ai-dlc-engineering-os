@@ -41,3 +41,9 @@ workspace/project-owned snapshot with a cascading foreign key. Every query valid
 fingerprint; stale snapshots return no edges. Project merges discard both indexes; purges
 cascade. Graphs are not injected into durable memory or exported as lessons. See
 [configuration, threat boundaries and rollback](REPOSITORY_GRAPH.md).
+
+**Verified execution.** Optional local CLI helpers bind command evidence to origin,
+HEAD and file fingerprints and grade six host-observed behavioral scenarios. Explicit
+imports reuse existing evaluation tables; recovery uses existing swarm leases without
+changing state. No model calls, automatic approvals or schema migration are added.
+See [trust limits and acceptance criteria](VERIFIED_EXECUTION.md).

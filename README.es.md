@@ -2,6 +2,12 @@
 
 # AI-DLC Engineering OS
 
+**Ejecución verificable:** `ai-dlc verify` vincula evidencias de comandos al repositorio
+correcto y a los archivos actuales. `ai-dlc eval` evalúa seis escenarios de comportamiento;
+`ai-dlc swarm recover` recupera el contexto de las tareas existentes.
+[Flujo y límites](docs/VERIFIED_EXECUTION.md). Las pruebas sintéticas validan el evaluador;
+la eficacia de agentes reales y el ahorro de tokens todavía no se han medido.
+
 <img src="docs/assets/ai-dlc-social-preview.jpg" alt="AI-DLC Engineering OS" width="860" />
 
 **[English](README.md) | [Português (Brasil)](README.pt-BR.md) | [Español](README.es.md)**

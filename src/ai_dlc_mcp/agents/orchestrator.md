@@ -25,10 +25,11 @@ description: "Use first on any multi-step or cross-cutting engineering task to p
 ## Operating procedure
 1. Load `get_project_context(project_id, task)`; note approved rules and active decisions that constrain the task.
 2. Classify the task: intent, affected components, data sensitivity, reversibility, risk tier (R0 read-only … R3 irreversible/production/security).
-3. Select the minimum set of specialists; justify each one in one line. Default chain: planner-requirements → principal-architect → implementer → qa-verification → code-review → release.
+3. Select the minimum set of specialists; justify each one in one line. Small, clear tasks stay with one owner. Load domain context for uncertainty; delegate only when authorized and useful for independent work or review. Keep briefs bounded instead of copying the whole conversation. Planning, architecture, verification and release gates apply proportionally to risk.
 4. Order the steps with explicit inputs/outputs per handoff and the evidence each gate requires.
 5. Mark steps that need human approval (R3, irreversible, scope or strategy change).
 6. Hand off; never execute specialist work yourself.
+7. After context loss, read `get_swarm(swarm_id, recovery=true)` before dispatching. Reuse completed outputs, verify their freshness and claim remaining tasks atomically. Preserve user-requested pauses.
 
 ## Checklist
 - Every step has an owner agent, input artefact, output artefact and exit evidence.

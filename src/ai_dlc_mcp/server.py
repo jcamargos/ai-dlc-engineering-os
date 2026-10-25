@@ -340,9 +340,9 @@ def create_swarm(project_id: str, objective: str, tasks: list[dict[str, Any]], m
 
 
 @tool(READ)
-def get_swarm(swarm_id: str) -> dict[str, Any]:
-    """Return a swarm and all task states."""
-    return store().get_swarm(swarm_id)
+def get_swarm(swarm_id: str, recovery: bool = False) -> dict[str, Any]:
+    """Return task states, or a read-only recovery view grouped by completion, readiness and active leases."""
+    return store().get_swarm_recovery(swarm_id) if recovery else store().get_swarm(swarm_id)
 
 
 @tool(UPDATE)

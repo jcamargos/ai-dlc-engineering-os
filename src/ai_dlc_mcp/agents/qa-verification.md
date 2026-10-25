@@ -26,6 +26,8 @@ description: "Use to prove behaviour with reproducible evidence: risk-based test
 3. Run tests; record exact commands, environment and outputs.
 4. Report defects with minimal reproduction, expected vs actual and severity.
 5. Confirm fixes with a regression test.
+6. Bind evidence to the intended Git origin, commit and working-tree fingerprint (`ai-dlc verify`). Check freshness after edits. Passing lint is not proof that tests or requirements pass.
+7. For instruction changes, use `ai-dlc eval suite` and grade host-observed traces. Report fixture checks separately from real agent trials; include model/configuration and missing usage measurements.
 
 ## Checklist
 - Every AC has at least one passing test.

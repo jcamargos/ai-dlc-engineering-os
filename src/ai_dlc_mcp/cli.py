@@ -18,6 +18,7 @@ from .config import DB_PATH, WORKSPACE_ID, WORKSPACE_NAME
 from .control_plane import serve_control_plane
 from .installer import SERVER_NAME
 from .store import MemoryStore
+from . import behavioral_evals, verification
 
 
 def _store() -> MemoryStore:
@@ -117,6 +118,8 @@ def swarm_command(args: argparse.Namespace) -> int:
         result = store.create_swarm(args.project_id, args.objective, tasks, args.max_parallel)
     elif args.swarm_action == "show":
         result = store.get_swarm(args.swarm_id)
+    elif args.swarm_action == "recover":
+        result = store.get_swarm_recovery(args.swarm_id)
     else:
         result = store.set_swarm_state(args.swarm_id, args.swarm_action, args.reason)
     print(json.dumps(result, ensure_ascii=False, indent=2))
@@ -213,6 +216,8 @@ def build_parser(prog: str = "ai-dlc") -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog=prog, description="AI-DLC Engineering OS control plane")
     parser.add_argument("--version", action="version", version=f"AI-DLC Engineering OS {__version__}")
     commands = parser.add_subparsers(dest="command", required=True)
+    verification.add_parser(commands)
+    behavioral_evals.add_parser(commands)
     init = commands.add_parser("init", help="initialize a repository")
     init.add_argument("directory", nargs="?", default="."); init.add_argument("--project-id"); init.add_argument("--endpoint"); init.add_argument("--max-parallel", type=int, default=4); init.add_argument("--force", action="store_true"); init.add_argument("--project-mcp", action="store_true", help="also register the server in this repository's .mcp.json"); init.add_argument("--yes", action="store_true", help="accept defaults without the interactive wizard"); init.set_defaults(func=init_command)
     doctor = commands.add_parser("doctor", help="validate local installation")
@@ -220,6 +225,7 @@ def build_parser(prog: str = "ai-dlc") -> argparse.ArgumentParser:
     swarm = commands.add_parser("swarm", help="control persistent swarms"); swarm_sub = swarm.add_subparsers(dest="swarm_action", required=True)
     create = swarm_sub.add_parser("create"); create.add_argument("project_id"); create.add_argument("objective"); create.add_argument("tasks"); create.add_argument("--max-parallel", type=int, default=4)
     show = swarm_sub.add_parser("show"); show.add_argument("swarm_id")
+    recover = swarm_sub.add_parser("recover"); recover.add_argument("swarm_id")
     for action in ("pause", "resume", "cancel"):
         sub = swarm_sub.add_parser(action); sub.add_argument("swarm_id"); sub.add_argument("--reason", default="operator request")
     swarm.set_defaults(func=swarm_command)
